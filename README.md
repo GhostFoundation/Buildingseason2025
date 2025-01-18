@@ -10,6 +10,7 @@ Ghost foundation Buildingseason repo of 2025
 # info about flowcharts
 Please use these symbols with their meaning:
 ![flowchartRules](https://github.com/user-attachments/assets/d9ad3125-5951-4d97-b8a5-b935cfcd5127)
+
 If you finished your flowchart please add it to this folder: [Flowcharts](https://github.com/GhostFoundation/Buildingseason2025/tree/main/flowcharts)
 
 
