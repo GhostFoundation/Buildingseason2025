@@ -1,11 +1,40 @@
 # Buildingseason2025
 Ghost foundation Buildingseason repo of 2025
 
-14-01-2025 swervedrive works, fieldorientated works, max velocity is set at 3m/s for training purposes
-real max speed is 7.22 m/s
+# table of contents
+1. [Info about flowcharts](#info-about-flowcharts)
+2. [Change Log format](#change-log-format)
+3. [Change Log](#change-log)
 
-Cameravision.java doesnt work yet work in progress
 
-18-01-2025 implemented apriltag detection in branch: [apriltag-vision-by-Gijs](https://github.com/GhostFoundation/Buildingseason2025/tree/apriltag-vision-by-Gijs)
-Decided to not do algea detection since it requires a third camera and we can only get the following info: where is the algea in 2d and how many algea are visible. 
-This info doesnt seem too important, will be discussed with others.
+# info about flowcharts
+Please use these symbols with their meaning:
+![flowchartRules](https://github.com/user-attachments/assets/d9ad3125-5951-4d97-b8a5-b935cfcd5127)
+If you finished your flowchart please add it to this folder: [Flowcharts](https://github.com/GhostFoundation/Buildingseason2025/tree/main/flowcharts)
+
+
+### Change Log format:
+DD-MM-YYYY
+
+Responsible: [Name of the Person]
+
+- Task: Brief description of the task performed.
+- Details: Additional context if required.
+- Info: Anything someone else might need to think about when continuing the work (optional).
+
+# Change Log
+
+14-01-2025 
+
+Responsible: Gijs van Maanen 
+- Task: Create basic drivecode with gyro
+- Details: swervedrive works, fieldorientated driving (gyro) works
+- Info: max velocity is set at 3m/s for training purposes real max speed is 7.22 m/s
+
+
+18-01-2025
+
+Responsible: Gijs van Maanen
+- Taks: Implement apriltag detection with the orange pi (photonvision)
+- Details: implemented apriltag detection in branch: [apriltag-vision-by-Gijs](https://github.com/GhostFoundation/Buildingseason2025/tree/apriltag-vision-by-Gijs) decided to not do algea detection since it requires a third camera and we can only get the following info: where is the algea in 2d and how many algea are visible. This info doesnt seem too important, will be discussed with others.
+- Info: Still has to be tested.
