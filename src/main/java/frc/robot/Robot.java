@@ -17,7 +17,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        m_robotContainer = new RobotContainer();
+       m_robotContainer = new RobotContainer();
         String leftCameraName = "leftCam";
         String rightCameraName = "rightCam";
         Transform3d cameraToRobot = new Transform3d(new Translation3d(0.15, 0, 0), new Rotation3d(0, 0, 0));
@@ -29,10 +29,10 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         try {
             Pose3d robotPose = m_visionSubsystem.calculateRobotPose();
+            SmartDashboard.putString("robot pose according to apriltags", robotPose.toString());
         } catch (Exception e) {
             SmartDashboard.putString("apriltag error", e.getMessage());
         }
-        
     }
 
     @Override

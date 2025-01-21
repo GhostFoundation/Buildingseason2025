@@ -43,6 +43,7 @@ public class AprilTagVisionSubsystem extends SubsystemBase {
         if (leftResult.hasTargets() && rightResult.hasTargets() && leftTarget.getFiducialId() == rightTarget.getFiducialId()) {
             int fiducialId = leftTarget.getFiducialId();
             Optional<Pose3d> tagPose = aprilTagFieldLayout.getTagPose(fiducialId);
+            SmartDashboard.putString("tag pose: ", tagPose.toString() + " tag: " + fiducialId);            
             if (tagPose.isPresent()) {
                 Pose3d robotPoseLeft = PhotonUtils.estimateFieldToRobotAprilTag(leftTarget.getBestCameraToTarget(), tagPose.get(), cameraToRobot);
                 Pose3d robotPoseRight = PhotonUtils.estimateFieldToRobotAprilTag(rightTarget.getBestCameraToTarget(), tagPose.get(), cameraToRobot);
@@ -55,6 +56,8 @@ public class AprilTagVisionSubsystem extends SubsystemBase {
         } else if (leftResult.hasTargets()) {
             int fiducialId = leftTarget.getFiducialId();
             Optional<Pose3d> tagPose = aprilTagFieldLayout.getTagPose(fiducialId);
+            SmartDashboard.putString("tag pose: ", tagPose.toString() + " tag: " + fiducialId);            
+
             if (tagPose.isPresent()) {
                 return PhotonUtils.estimateFieldToRobotAprilTag(leftTarget.getBestCameraToTarget(), tagPose.get(), cameraToRobot);
             } else {
@@ -64,6 +67,7 @@ public class AprilTagVisionSubsystem extends SubsystemBase {
         } else {
             int fiducialId = rightTarget.getFiducialId();
             Optional<Pose3d> tagPose = aprilTagFieldLayout.getTagPose(fiducialId);
+            SmartDashboard.putString("tag pose: ", tagPose.toString() + " tag: " + fiducialId);            
             if (tagPose.isPresent()) {
                 return PhotonUtils.estimateFieldToRobotAprilTag(rightTarget.getBestCameraToTarget(), tagPose.get(), cameraToRobot);
             } else {
@@ -75,6 +79,5 @@ public class AprilTagVisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
     }
 }
