@@ -39,3 +39,10 @@ Responsible: Gijs van Maanen
 - Taks: Implement apriltag detection with the orange pi (photonvision)
 - Details: implemented apriltag detection in branch: [apriltag-vision-by-Gijs](https://github.com/GhostFoundation/Buildingseason2025/tree/apriltag-vision-by-Gijs) decided to not do algea detection since it requires a third camera and we can only get the following info: where is the algea in 2d and how many algea are visible. This info doesnt seem too important, will be discussed with others.
 - Info: Still has to be tested.
+
+21-01-2025
+
+Responsible: Gijs van Maanen
+
+- Task: Merged apriltag branch with main
+- Details: Tested apriltag vision, it works so i merged it with main
