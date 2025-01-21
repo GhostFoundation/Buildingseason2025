@@ -41,6 +41,13 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 15;
 
     public static final boolean kGyroReversed = true;
+
+    public static final double kPDrive = 0.000000;
+    public static final double kIDrive = 0.000000;
+    public static final double kDDrive = 0.000000;
+    public static final double kPTurn = 0.000000;
+    public static final double kITurn = 0.000000;
+    public static final double kDTurn = 0.000000;
   }
 
   public static final class ModuleConstants {
