@@ -9,11 +9,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.AprilTagVisionSubsystem;
+import frc.robot.subsystems.CoralCannon;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
     private AprilTagVisionSubsystem m_visionSubsystem;
+    private CoralCannon n_CoralCannon = new CoralCannon(); 
 
     @Override
     public void robotInit() {
@@ -32,6 +34,7 @@ public class Robot extends TimedRobot {
         } catch (Exception e) {
             SmartDashboard.putString("apriltag error", e.getMessage());
         }
+        n_CoralCannon.Launche ();
         
     }
 
