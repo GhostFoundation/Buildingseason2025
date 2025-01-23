@@ -76,6 +76,8 @@ dependencies {
 
     implementation 'edu.wpi.first.wpilibj:wpilibj-java:2023.1.1'
     implementation 'edu.wpi.first.cscore:cscore-java:2023.1.1'
+    implementation 'com.pathplanner.lib:PathplannerLib-java:2025.2.1'
+
 }
 
 test {

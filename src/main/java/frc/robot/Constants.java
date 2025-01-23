@@ -42,12 +42,12 @@ public final class Constants {
 
     public static final boolean kGyroReversed = true;
 
-    public static final double kPDrive = 0.000000;
-    public static final double kIDrive = 0.000000;
-    public static final double kDDrive = 0.000000;
-    public static final double kPTurn = 0.000000;
-    public static final double kITurn = 0.000000;
-    public static final double kDTurn = 0.000000;
+    public static final double kPDrive = 0.2;
+    public static final double kIDrive = 0;
+    public static final double kDDrive = 0.01;
+    public static final double kPTurn = 0.75;  //0.75;
+    public static final double kITurn = 0;
+    public static final double kDTurn = 0.8; //0.8
   }
 
   public static final class ModuleConstants {
