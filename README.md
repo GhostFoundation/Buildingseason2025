@@ -46,3 +46,12 @@ Responsible: Gijs van Maanen
 
 - Task: Merged apriltag branch with main
 - Details: Tested apriltag vision, it works so i merged it with main
+
+23-01-2025
+
+Responsible: Gijs van Maanen
+
+- Task: Make sure the robot can run Pathplanner autonomous commands and tune the PID of rotation and translation.
+- Details: Paths can now be made in pathplanner and selected on the smartdashboard. PID is tuned.
+- Info: Autonomous paths where the robot is driving while simultaniously turning will not work for some reason. The robot does turn but forgets where the robot is supposed to end. I will look into this.
+
