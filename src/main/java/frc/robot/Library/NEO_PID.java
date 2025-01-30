@@ -6,6 +6,8 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+
 
 public class NEO_PID {
     public cs CS = new cs();
@@ -102,6 +104,9 @@ public class NEO_PID {
         }
     }
 
+    // Testing for elevator
+    //private DCMotor elevatorMotorModel = DCMotor.getNEO(2);
+
     //----------------------------------------------------------------
     // Constructor
     //----------------------------------------------------------------
@@ -110,6 +115,7 @@ public class NEO_PID {
         PAR.PIDController = PAR.motor.getClosedLoopController();
         PAR.Encoder = PAR.motor.getAbsoluteEncoder();
 
+        
         STS.kP = PAR.kP;
         STS.kI = PAR.kI;
         STS.kD = PAR.kD;

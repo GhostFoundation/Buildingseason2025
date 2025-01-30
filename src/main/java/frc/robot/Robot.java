@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.AprilTagVisionSubsystem;
+import frc.robot.Library.*;
 
 import frc.robot.subsystems.Elevator;
 
@@ -18,6 +19,7 @@ public class Robot extends TimedRobot {
     private AprilTagVisionSubsystem m_visionSubsystem;
 
     private Elevator elevator = new Elevator();
+    private FakePS4Controller Operatorcontroller = new FakePS4Controller(1);
 
     @Override
     public void robotInit() {
@@ -48,12 +50,27 @@ public class Robot extends TimedRobot {
         }
     }
 
+    /** This function is called once when teleop is enabled. */
+    @Override
+    public void teleopInit() {
+        elevator.init();
+    }
+
     @Override
     public void teleopPeriodic() {
         //----------------------------------------------------------------
         // Elevator
         //----------------------------------------------------------------
-        elevator.SetPosition(elevator.positions.Zero);
+        // Connect controller buttons with positions
+        elevator.SetZeroPosition(Operatorcontroller.getR1Button());
+        elevator.SetL1(Operatorcontroller.getCrossButton());
+        elevator.SetL2(Operatorcontroller.getSquareButton());
+        elevator.SetL3(Operatorcontroller.getTriangleButton());
+        elevator.SetL4(Operatorcontroller.getCircleButton());
+        elevator.SetCorralStation(Operatorcontroller.getL1Button());
+        
+        // Set elevator to position depending on controller state
+        elevator.SetElevator();
     }
 
     @Override
