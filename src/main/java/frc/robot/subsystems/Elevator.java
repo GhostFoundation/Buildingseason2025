@@ -1,5 +1,11 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkMax;
+
 import frc.robot.Library.NEO_PID;
 import frc.robot.Library.NEO_SpeedCtrl;
 
@@ -10,8 +16,13 @@ public class Elevator {
     //----------------------------------------------------------------
     // Objects
     //----------------------------------------------------------------
-    private NEO_SpeedCtrl motorconfig = new NEO_SpeedCtrl(0, true, false);
+    private int elevatorCan_id = 0;
+    private int FollowerCan_id = 1;
+
+    private NEO_SpeedCtrl motorconfig = new NEO_SpeedCtrl(elevatorCan_id, true, false);
     public NEO_PID ElevatorMotor = new NEO_PID(motorconfig);
+    private SparkMax followmotor = new SparkMax(FollowerCan_id, MotorType.kBrushless);
+    private SparkMaxConfig configFollow = new SparkMaxConfig();
 
     public Positions positions = new Positions();
     public sts STS = new sts();
@@ -63,7 +74,7 @@ public class Elevator {
       }
     
     public class par{
-      private final double ZeroPosition = 0;
+      private final double ZeroPosition = 0; //[degrees]
       private final double L1Position = 45;
       private final double L2Position = 90;
       private final double L3Position = 115;
@@ -91,8 +102,15 @@ public class Elevator {
         ElevatorMotor.PAR.kD = 0;
         ElevatorMotor.PAR.minOutputRange = -1;
         ElevatorMotor.PAR.maxOutputRange = 1;
+        ElevatorMotor.PAR.maxVelocity = 4200; //[RPM]
+        ElevatorMotor.PAR.maxAcceleration = 6000; //[RPM]
+        ElevatorMotor.PAR.allowedClosedLoopError = 0.5;
 
-        ElevatorMotor.setconfig();
+
+        configFollow.follow(elevatorCan_id)
+                    .inverted(true);
+        
+        followmotor.configure(configFollow, null,null);
     }
 
     public void SetZeroPosition(Boolean Trigger){

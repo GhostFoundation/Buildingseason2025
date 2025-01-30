@@ -1,12 +1,14 @@
 package frc.robot.Library;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.sim.SparkFlexSim;
+import com.revrobotics.sim.SparkLimitSwitchSim;
+import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
-import edu.wpi.first.math.system.plant.DCMotor;
 
 
 public class NEO_PID {
@@ -25,6 +27,9 @@ public class NEO_PID {
         private double kFF;
         private double Output_Min;
         private double Output_Max;
+        private double maxVelocity; //[RPM]
+        private double maxAcceleration; //[RPM]
+        private double allowedClosedLoopError;
         
         /**
          * Get the Porportional gain of the PID controller
@@ -73,6 +78,18 @@ public class NEO_PID {
         public double get_OutputMax(){
             return Output_Max;
         }
+
+        public double maxVelocity(){
+            return maxVelocity;
+        }
+
+        public double maxAcceleration(){
+            return maxAcceleration;
+        }
+
+        public double allowedClosedLoopError(){
+            return allowedClosedLoopError;
+        }
     }
 
     //paramaters
@@ -86,6 +103,9 @@ public class NEO_PID {
         public double kFF = 0;
         public double minOutputRange = -1;
         public double maxOutputRange = 1;
+        public double maxVelocity = 4200; //[RPM]
+        public double maxAcceleration = 6000; //[RPM]
+        public double allowedClosedLoopError = 0.5;
         
         /**
          * Return the PID Controller object of the motor
@@ -104,9 +124,6 @@ public class NEO_PID {
         }
     }
 
-    // Testing for elevator
-    //private DCMotor elevatorMotorModel = DCMotor.getNEO(2);
-
     //----------------------------------------------------------------
     // Constructor
     //----------------------------------------------------------------
@@ -122,6 +139,9 @@ public class NEO_PID {
         STS.kFF = PAR.kFF;
         STS.Output_Min = PAR.minOutputRange;
         STS.Output_Max = PAR.maxOutputRange;
+        STS.maxVelocity = PAR.maxVelocity;
+        STS.maxAcceleration = PAR.maxAcceleration;
+        STS.allowedClosedLoopError = PAR.allowedClosedLoopError;
     }
 
     //----------------------------------------------------------------
@@ -135,12 +155,19 @@ public class NEO_PID {
         set_OutPutRange(PAR.minOutputRange, PAR.maxOutputRange);
 
         SparkMaxConfig config = new SparkMaxConfig();
+        
         config.closedLoop
+        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
         .p(STS.kP)
         .i(STS.kI)
         .d(STS.kD)
         .outputRange(STS.Output_Min, STS.Output_Max)
-        .velocityFF(STS.kFF);
+        .maxMotion
+        // Set MAXMotion parameters for position control
+        .maxVelocity(STS.maxVelocity) // RPM
+        .maxAcceleration(STS.maxAcceleration) // RPM
+        .allowedClosedLoopError(STS.allowedClosedLoopError);
+        
         PAR.motor.configure(config, null, null);
     }
 
