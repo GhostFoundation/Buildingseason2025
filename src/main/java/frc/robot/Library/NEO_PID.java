@@ -17,10 +17,10 @@ public class NEO_PID {
     
     //Status
     public class sts{
-        private double P_Gain;
-        private double I_Gain;
-        private double D_Gain;
-        private double FF_Gain;
+        private double kP;
+        private double kI;
+        private double kD;
+        private double kFF;
         private double Output_Min;
         private double Output_Max;
         
@@ -29,7 +29,7 @@ public class NEO_PID {
          * @return Current Porportional gain value
          */
         public double get_P(){
-            return P_Gain;
+            return kP;
         }
 
         /**
@@ -37,7 +37,7 @@ public class NEO_PID {
          * @return Current Integral gain value
          */
         public double get_I(){
-            return I_Gain;
+            return kI;
         }
 
         /**
@@ -45,7 +45,7 @@ public class NEO_PID {
          * @return Current Derivative gain value
          */
         public double get_D(){
-            return D_Gain;
+            return kD;
         }
 
         /**
@@ -53,7 +53,7 @@ public class NEO_PID {
          * @return Current Feed Forward gain value
          */
         public double get_FF(){
-            return FF_Gain;
+            return kFF;
         }
 
         /**
@@ -78,12 +78,18 @@ public class NEO_PID {
         private SparkMax motor;
         private SparkClosedLoopController PIDController;
         private SparkAbsoluteEncoder Encoder;
+        public double kP = 1;
+        public double kI = 0;
+        public double kD = 0;
+        public double kFF = 0;
+        public double minOutputRange = -1;
+        public double maxOutputRange = 1;
         
         /**
          * Return the PID Controller object of the motor
          * @return PID Controller object
          */
-        public SparkClosedLoopController getPIDController(){
+        private SparkClosedLoopController getPIDController(){
             return PIDController;
         }
 
@@ -91,7 +97,7 @@ public class NEO_PID {
          * Return the Absolute Encoder object of the motor
          * @return Absolute Encoder object
          */
-        public SparkAbsoluteEncoder getEncoder(){
+        private SparkAbsoluteEncoder getEncoder(){
             return Encoder;
         }
     }
@@ -103,19 +109,32 @@ public class NEO_PID {
         PAR.motor = motor.PAR.Motor;
         PAR.PIDController = PAR.motor.getClosedLoopController();
         PAR.Encoder = PAR.motor.getAbsoluteEncoder();
+
+        STS.kP = PAR.kP;
+        STS.kI = PAR.kI;
+        STS.kD = PAR.kD;
+        STS.kFF = PAR.kFF;
+        STS.Output_Min = PAR.minOutputRange;
+        STS.Output_Max = PAR.maxOutputRange;
     }
 
     //----------------------------------------------------------------
     // Methods
     //----------------------------------------------------------------
-    private void setconfig(){
+    public void setconfig(){
+        set_P(PAR.kP);
+        set_I(PAR.kP);
+        set_D(PAR.kP);
+        set_FF(PAR.kP);
+        set_OutPutRange(PAR.minOutputRange, PAR.maxOutputRange);
+
         SparkMaxConfig config = new SparkMaxConfig();
         config.closedLoop
-        .p(STS.P_Gain)
-        .i(STS.I_Gain)
-        .d(STS.D_Gain)
+        .p(STS.kP)
+        .i(STS.kI)
+        .d(STS.kD)
         .outputRange(STS.Output_Min, STS.Output_Max)
-        .velocityFF(STS.FF_Gain);
+        .velocityFF(STS.kFF);
         PAR.motor.configure(config, null, null);
     }
 
@@ -123,36 +142,32 @@ public class NEO_PID {
      * Set the Porportional gain of the PID controller
      * @param P_gain Porportional gain value
      */
-    public void set_P(double P_gain){
-        STS.P_Gain = P_gain;
-        setconfig();
+    private void set_P(double P_gain){
+        STS.kP = P_gain;
     }
 
     /**
      * Set the Integral gain of the PID controller
      * @param I_gain Intergral gain value
      */
-    public void set_I(double I_gain){
-        STS.I_Gain = I_gain;
-        setconfig();
+    private void set_I(double I_gain){
+        STS.kI = I_gain;
     }
 
     /**
      * Set the Derivative gain of the PID controller 
      * @param D_gain Derivative gain value
      */
-    public void set_D(double D_gain){
-        STS.D_Gain = D_gain;
-        setconfig();
+    private void set_D(double D_gain){
+        STS.kD = D_gain;
     }
 
     /**
      * Set the Feed Forward gain of the PID controller
      * @param FF_gain Feed Forward gain value
      */
-    public void set_FF(double FF_gain){
-        STS.FF_Gain = FF_gain;
-        setconfig();
+    private void set_FF(double FF_gain){
+        STS.kFF = FF_gain;
     }
 
     /**
@@ -160,10 +175,9 @@ public class NEO_PID {
      * @param min Minimum output value (min -1)
      * @param max Maximum output value (max 1)
      */
-    public void set_OutPutRange(double min, double max){
+    private void set_OutPutRange(double min, double max){
         STS.Output_Min = min;
         STS.Output_Max = max;
-        setconfig();
     }
 
     /**

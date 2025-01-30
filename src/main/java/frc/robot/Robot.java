@@ -10,10 +10,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.AprilTagVisionSubsystem;
 
+import frc.robot.subsystems.Elevator;
+
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
     private AprilTagVisionSubsystem m_visionSubsystem;
+
+    private Elevator elevator = new Elevator();
 
     @Override
     public void robotInit() {
@@ -22,6 +26,7 @@ public class Robot extends TimedRobot {
         String rightCameraName = "rightCam";
         Transform3d cameraToRobot = new Transform3d(new Translation3d(0.15, 0, 0), new Rotation3d(0, 0, 0));
         m_visionSubsystem = new AprilTagVisionSubsystem(leftCameraName, rightCameraName, cameraToRobot);
+
     }
 
     @Override
@@ -33,6 +38,7 @@ public class Robot extends TimedRobot {
         } catch (Exception e) {
             SmartDashboard.putString("apriltag error", e.getMessage());
         }
+
     }
 
     @Override
@@ -43,7 +49,12 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        //----------------------------------------------------------------
+        // Elevator
+        //----------------------------------------------------------------
+        elevator.SetPosition(elevator.positions.Zero);
+    }
 
     @Override
     public void testInit() {
