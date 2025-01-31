@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -35,7 +36,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  PS4Controller m_driverController = new PS4Controller(OIConstants.kDriverControllerPort);
 
   EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
 
@@ -102,9 +103,15 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kCross.value).whileTrue(new RunCommand(() -> endEffector.setMotorRight(), endEffector));
-    new JoystickButton(m_driverController, Button.kSquare.value).whileTrue(new RunCommand(() -> endEffector.setMotorLeft(), endEffector));
+    new JoystickButton(m_driverController, Button.kCross.value)
+    .whileTrue(new RunCommand(() -> endEffector.setMotorRight(), endEffector))
+    .onFalse(new RunCommand(() -> endEffector.StopMotor(), endEffector));
+
+new JoystickButton(m_driverController, Button.kSquare.value)
+    .onTrue(new RunCommand(() -> endEffector.setMotorLeft(), endEffector))
+    .onFalse(new RunCommand(() -> endEffector.StopMotor(), endEffector));
     new JoystickButton(m_driverController, Button.kShare.value).whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+
 
     new JoystickButton(m_driverController, Button.kR1.value)
         .whileTrue(new RunCommand(

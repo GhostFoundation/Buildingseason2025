@@ -19,13 +19,14 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
   }
   public void setMotorRight(){
-    motor1.set(1);
-    motor2.set(1);
+    motor1.set(0.3);
+    motor2.set(0.6);
   }
   public void setMotorLeft(){
-    motor1.set(-1);
-    motor2.set(-1);
+    motor1.set(-0.3);
+    motor2.set(-0.6);
   }
+
 
 
   public void StopMotor(){
