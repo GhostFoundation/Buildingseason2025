@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
     private Elevator elevator = new Elevator();
     private Arm arm = new Arm();
     private FakePS4Controller Operatorcontroller = new FakePS4Controller(1);
-
+    private FakePS4Controller Drivercontroller = new FakePS4Controller(0);
     @Override
     public void robotInit() {
        m_robotContainer = new RobotContainer();
@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
         // Elevator
         //----------------------------------------------------------------
         // Connect controller buttons with positions
-        /**
+    
         elevator.SetZeroPosition(Operatorcontroller.getR1Button());
         elevator.SetL1(Operatorcontroller.getCrossButton());
         elevator.SetL2(Operatorcontroller.getSquareButton());
@@ -74,19 +74,20 @@ public class Robot extends TimedRobot {
         
         // Set elevator to position depending on controller state
         elevator.SetElevator();
-        **/
 
         //----------------------------------------------------------------
         // Arm
         //----------------------------------------------------------------
-        arm.SetZeroPosition(Operatorcontroller.getR1Button());
-        arm.SetL1(Operatorcontroller.getCrossButton());
-        arm.SetL2(Operatorcontroller.getSquareButton());
-        arm.SetL3(Operatorcontroller.getTriangleButton());
-        arm.SetL4(Operatorcontroller.getCircleButton());
-        arm.SetCorralStation(Operatorcontroller.getL1Button());
+        arm.SetZeroPosition(Drivercontroller.getR1Button());
+        arm.SetL1(Drivercontroller.getCrossButton());
+        arm.SetL2(Drivercontroller.getSquareButton());
+        arm.SetL3(Drivercontroller.getTriangleButton());
+        arm.SetL4(Drivercontroller.getCircleButton());
+        arm.SetCorralStation(Drivercontroller.getL1Button());
 
+        // Set elevator to position depending on controller state
         arm.SetArm();
+        
     }
 
     @Override

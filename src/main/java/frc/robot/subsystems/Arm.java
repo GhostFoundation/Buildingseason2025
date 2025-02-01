@@ -102,8 +102,6 @@ public class Arm {
         ArmMotor.PAR.maxAcceleration = 6000; //[RPM]
         ArmMotor.PAR.allowedClosedLoopError = 0.5;
 
-
-
     }
 
     public void SetZeroPosition(Boolean Trigger){
