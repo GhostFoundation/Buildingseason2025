@@ -12,6 +12,7 @@ import frc.robot.subsystems.AprilTagVisionSubsystem;
 import frc.robot.Library.*;
 
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Arm;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
@@ -19,6 +20,7 @@ public class Robot extends TimedRobot {
     private AprilTagVisionSubsystem m_visionSubsystem;
 
     private Elevator elevator = new Elevator();
+    private Arm arm = new Arm();
     private FakePS4Controller Operatorcontroller = new FakePS4Controller(1);
 
     @Override
@@ -62,6 +64,7 @@ public class Robot extends TimedRobot {
         // Elevator
         //----------------------------------------------------------------
         // Connect controller buttons with positions
+        /**
         elevator.SetZeroPosition(Operatorcontroller.getR1Button());
         elevator.SetL1(Operatorcontroller.getCrossButton());
         elevator.SetL2(Operatorcontroller.getSquareButton());
@@ -71,6 +74,19 @@ public class Robot extends TimedRobot {
         
         // Set elevator to position depending on controller state
         elevator.SetElevator();
+        **/
+
+        //----------------------------------------------------------------
+        // Arm
+        //----------------------------------------------------------------
+        arm.SetZeroPosition(Operatorcontroller.getR1Button());
+        arm.SetL1(Operatorcontroller.getCrossButton());
+        arm.SetL2(Operatorcontroller.getSquareButton());
+        arm.SetL3(Operatorcontroller.getTriangleButton());
+        arm.SetL4(Operatorcontroller.getCircleButton());
+        arm.SetCorralStation(Operatorcontroller.getL1Button());
+
+        arm.SetArm();
     }
 
     @Override

@@ -10,19 +10,16 @@ import frc.robot.Library.NEO_PID;
 import frc.robot.Library.NEO_SpeedCtrl;
 
 //----------------------------------------------------------------
-// Elevator Subsystem
+// Arm Subsystem
 //----------------------------------------------------------------
-public class Elevator {
+public class Arm {
     //----------------------------------------------------------------
     // Objects
     //----------------------------------------------------------------
-    private int elevatorCan_id = 23;
-    private int FollowerCan_id = 24;
+    private int arm_id = 25;
 
-    private NEO_SpeedCtrl motorconfig = new NEO_SpeedCtrl(elevatorCan_id, true, false);
-    public NEO_PID ElevatorMotor = new NEO_PID(motorconfig);
-    private SparkMax followmotor = new SparkMax(FollowerCan_id, MotorType.kBrushless);
-    private SparkMaxConfig configFollow = new SparkMaxConfig();
+    private NEO_SpeedCtrl motorconfig = new NEO_SpeedCtrl(arm_id, true, false);
+    public NEO_PID ArmMotor = new NEO_PID(motorconfig);
 
     public Positions positions = new Positions();
     public sts STS = new sts();
@@ -74,11 +71,11 @@ public class Elevator {
     
     public class par{
       private final double ZeroPosition = 0; //[degrees]
-      private final double L1Position = 45;
-      private final double L2Position = 90;
-      private final double L3Position = 115;
-      private final double L4Position = 180;
-      private final double CorralStation = 225;
+      private final double L1Position = -40;
+      private final double L2Position = 140;
+      private final double L3Position = 140;
+      private final double L4Position = 142.5;
+      private final double CorralStation = -27;
     }
 
     enum Position {
@@ -96,20 +93,17 @@ public class Elevator {
     // Methods
     //----------------------------------------------------------------
     public void init(){
-        ElevatorMotor.PAR.kP = 1;
-        ElevatorMotor.PAR.kI = 0;
-        ElevatorMotor.PAR.kD = 0;
-        ElevatorMotor.PAR.minOutputRange = -1;
-        ElevatorMotor.PAR.maxOutputRange = 1;
-        ElevatorMotor.PAR.maxVelocity = 4200; //[RPM]
-        ElevatorMotor.PAR.maxAcceleration = 6000; //[RPM]
-        ElevatorMotor.PAR.allowedClosedLoopError = 0.5;
+        ArmMotor.PAR.kP = 0.1;
+        ArmMotor.PAR.kI = 0;
+        ArmMotor.PAR.kD = 0;
+        ArmMotor.PAR.minOutputRange = -1;
+        ArmMotor.PAR.maxOutputRange = 1;
+        ArmMotor.PAR.maxVelocity = 4200; //[RPM]
+        ArmMotor.PAR.maxAcceleration = 6000; //[RPM]
+        ArmMotor.PAR.allowedClosedLoopError = 0.5;
 
 
-        configFollow.follow(elevatorCan_id)
-                    .inverted(true);
-        
-        followmotor.configure(configFollow, null,null);
+
     }
 
     public void SetZeroPosition(Boolean Trigger){
@@ -154,31 +148,31 @@ public class Elevator {
       }
     }
 
-    public void SetElevator(){
+    public void SetArm(){
 
         switch(position) {
             case Zero: 
-              ElevatorMotor.set_pos(PAR.ZeroPosition);
+              ArmMotor.set_pos(PAR.ZeroPosition);
               break;
 
             case L1: 
-              ElevatorMotor.set_pos(PAR.L1Position);
+              ArmMotor.set_pos(PAR.L1Position);
               break;
 
             case L2: 
-              ElevatorMotor.set_pos(PAR.L2Position);
+              ArmMotor.set_pos(PAR.L2Position);
               break;
 
             case L3: 
-              ElevatorMotor.set_pos(PAR.L3Position);
+              ArmMotor.set_pos(PAR.L3Position);
               break;
 
             case L4: 
-              ElevatorMotor.set_pos(PAR.L4Position);
+              ArmMotor.set_pos(PAR.L4Position);
               break;
 
             case CorralStation: 
-              ElevatorMotor.set_pos(PAR.CorralStation);
+              ArmMotor.set_pos(PAR.CorralStation);
               break;
 
             default:
