@@ -3,7 +3,6 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 
 public final class Constants {
   public static final class DriveConstants {
@@ -13,9 +12,9 @@ public final class Constants {
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(19.2285);
+    public static final double kTrackWidth = 0.515; //meters
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(19.2285);
+    public static final double kWheelBase = 0.515; //meters
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),

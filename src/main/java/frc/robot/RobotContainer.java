@@ -8,8 +8,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -18,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Library.FakePS4Controller;
+import frc.robot.Library.FakePS4Controller.Button;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
@@ -36,7 +36,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   // The driver's controller
-  PS4Controller m_driverController = new PS4Controller(OIConstants.kDriverControllerPort);
+  FakePS4Controller m_driverController = new FakePS4Controller(OIConstants.kDriverControllerPort);
 
   EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
 
@@ -56,7 +56,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(-m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
 
@@ -112,7 +112,6 @@ new JoystickButton(m_driverController, Button.kSquare.value)
     .onFalse(new RunCommand(() -> endEffector.StopMotor(), endEffector));
     new JoystickButton(m_driverController, Button.kShare.value).whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
-
     new JoystickButton(m_driverController, Button.kR1.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
@@ -125,6 +124,7 @@ new JoystickButton(m_driverController, Button.kSquare.value)
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+
     return autoChooser.getSelected();
   }
 }
