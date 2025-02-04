@@ -90,4 +90,11 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+
+  public static final class ArmConstants {
+    /**
+     * place holder, replace with real value!
+     */
+    public static final int rotationMotorCanId = 3; 
+  }
 }
