@@ -11,11 +11,16 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.AprilTagVisionSubsystem;
 import frc.robot.subsystems.CoralCannon;
 
+import frc.robot.Library.*;
+
+
+
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
     private AprilTagVisionSubsystem m_visionSubsystem;
     private CoralCannon n_CoralCannon = new CoralCannon(); 
+    private FakePS4Controller OperatorController = new FakePS4Controller(1);
 
     @Override
     public void robotInit() {
@@ -34,7 +39,8 @@ public class Robot extends TimedRobot {
         } catch (Exception e) {
             SmartDashboard.putString("apriltag error", e.getMessage());
         }
-        n_CoralCannon.Launche ();
+
+        n_CoralCannon.Launche();
         
     }
 
@@ -46,7 +52,10 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        n_CoralCannon.CannonControll(OperatorController.getR2Button(),OperatorController.getL2Axis(), OperatorController.getCircleButton());
+    
+    }
 
     @Override
     public void testInit() {
