@@ -95,6 +95,12 @@ public final class Constants {
     /**
      * place holder, replace with real value!
      */
-    public static final int rotationMotorCanId = 3; 
+    public static final int kRotationMotorCanId = 3; 
+    public static final double kP = 0.0;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double kFF = 0.0;
+    public static final double kOutputMin = -1.0;
+    public static final double kOutputMax = 1.0;
   }
 }
