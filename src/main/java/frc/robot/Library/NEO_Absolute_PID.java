@@ -170,11 +170,11 @@ public class NEO_Absolute_PID {
      * Go to the position of the encoder and hold it there
      * @param pos The position on the encoder
      */
-    public void set_pos_position(double pos) {
+    public void set_position(double pos) {
         PAR.PIDController.setReference(pos, ControlType.kPosition);
     }
 
-    public void set_pos_motionposition(double pos) {
+    public void set_motionposition(double pos) {
         PAR.PIDController.setReference(pos, ControlType.kMAXMotionPositionControl);
     }
 }

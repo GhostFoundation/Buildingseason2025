@@ -102,5 +102,10 @@ public final class Constants {
     public static final double kFF = 0.0;
     public static final double kOutputMin = -1.0;
     public static final double kOutputMax = 1.0;
+    public static final double kPosition1 = 0.0;
+    public static final double kPosition2 = 0.0;
+    public static final double kPosition3 = 0.0;
+    public static final double kPosition4 = 0.0;
+    public static final double kPosition5 = 0.0;
   }
 }

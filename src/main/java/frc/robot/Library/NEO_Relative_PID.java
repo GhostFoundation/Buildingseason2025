@@ -204,7 +204,7 @@ public class NEO_Relative_PID {
      * Go to the position of the encoder and hold it there. Updates the position variable in the mean while
      * @param pos The position on the encoder in degrees
      */
-    public void set_pos_position(double pos) {
+    public void set_position(double pos) {
         pos = pos/360; //convert degrees to rotations
         PAR.PIDController.setReference(pos, ControlType.kPosition);
         update_position();

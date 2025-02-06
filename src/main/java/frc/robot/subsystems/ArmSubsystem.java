@@ -9,17 +9,27 @@ public class ArmSubsystem {
     // Attributes
     //----------------------------------------------------------------
     SparkMax Rotational_Motor = new SparkMax(Constants.ArmConstants.kRotationMotorCanId, SparkMax.MotorType.kBrushless);
-    NEO_Absolute_PID Rotational_PID = new NEO_Absolute_PID(Rotational_Motor);
+    NEO_Absolute_PID Motor = new NEO_Absolute_PID(Rotational_Motor);
 
     //----------------------------------------------------------------
     // Constructor
     //----------------------------------------------------------------
     public ArmSubsystem(){
-        Rotational_PID.set_P(Constants.ArmConstants.kP);
-        Rotational_PID.set_I(Constants.ArmConstants.kI);
-        Rotational_PID.set_D(Constants.ArmConstants.kD);
-        Rotational_PID.set_FF(Constants.ArmConstants.kFF);
-        Rotational_PID.set_OutPutRange(Constants.ArmConstants.kOutputMin,Constants.ArmConstants.kOutputMax);
+        Motor.set_P(Constants.ArmConstants.kP);
+        Motor.set_I(Constants.ArmConstants.kI);
+        Motor.set_D(Constants.ArmConstants.kD);
+        Motor.set_FF(Constants.ArmConstants.kFF);
+        Motor.set_OutPutRange(Constants.ArmConstants.kOutputMin,Constants.ArmConstants.kOutputMax);
+    }
+
+    public void ArmPosition(FakePS4Controller controller){
+        if(controller.getSquareButton()){ //change button mapping later!
+            Motor.set_position(Constants.ArmConstants.kPosition1);
+        }
+        else if(controller.getTriangleButton()){
+            Motor.set_position(Constants.ArmConstants.kPosition2);
+        }
+        
     }
 
 }
