@@ -180,5 +180,6 @@ logs/
 ctre_sim/
 
 # get rid of BIN folder updates
-/bin/
-*bin\main\frc\robot
+bin/
+*bin/
+Buildingseason2025/bin/
