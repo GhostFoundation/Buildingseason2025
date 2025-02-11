@@ -29,6 +29,15 @@ public class ArmSubsystem {
         else if(controller.getTriangleButton()){
             Motor.set_position(Constants.ArmConstants.kPosition2);
         }
+        else if(controller.getCircleButton()){
+            Motor.set_position(Constants.ArmConstants.kPosition3);
+        }
+        else if(controller.getCrossButton()){
+            Motor.set_position(Constants.ArmConstants.kPosition4);
+        }
+        else if(controller.getR1Button()){
+            Motor.set_position(Constants.ArmConstants.kPosition5);
+        }
         
     }
 
