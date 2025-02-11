@@ -6,8 +6,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
 
-import frc.robot.Library.NEO_PID;
-import frc.robot.Library.NEO_SpeedCtrl;
+import frc.robot.Library.*;
 
 //----------------------------------------------------------------
 // Elevator Subsystem
