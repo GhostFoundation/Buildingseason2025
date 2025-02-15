@@ -17,7 +17,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Library.FakePS4Controller;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.CoralSubsystem.Setpoint;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -28,14 +31,16 @@ import frc.robot.subsystems.DriveSubsystem;
 public class RobotContainer {
       private final SendableChooser<Command> autoChooser;
 
+    
 
     private final Field2d field;
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
+  
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-
+  FakePS4Controller m_driverController = new FakePS4Controller(OIConstants.kDriverControllerPort);
+  FakePS4Controller m_operatorController = new FakePS4Controller(OIConstants.kDriverControllerPort);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -52,7 +57,8 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                
+                -MathUtil.applyDeadband(-m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
 
@@ -99,12 +105,18 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    //new buttons
+    // new JoystickButton(m_driverController, Button.kCross.value).onTrue(m_coral.setSetpointCommand(Setpoint.kRest));
+    // new JoystickButton(m_driverController,Button.kTriangle.value).onTrue(m_coral.setSetpointCommand(Setpoint.kLevel2));
+
+    //existing buttons
     new JoystickButton(m_driverController, Button.kShare.value).whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
+
+    // new JoystickButton(m_driverController, Button.kR1.value)
+    //     .whileTrue(new RunCommand(
+    //         () -> m_robotDrive.setX(),
+    //         m_robotDrive));
   }
 
   /**

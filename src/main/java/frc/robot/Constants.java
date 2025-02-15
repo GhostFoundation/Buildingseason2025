@@ -6,6 +6,24 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
+  //added from rev starter bot
+  public static final class CoralSubsystemConstants {
+
+
+    public static final class ArmSetpoints {
+      public static final double kRest = 0;
+      public static final double kFeederStation = 120;
+      public static final double kLevel1 = -40;
+      public static final double kLevel2 = 60;
+      public static final double kLevel3 = 120;
+      public static final double kLevel4 = 180;
+    }
+
+  }
+
+
+
+
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -30,15 +48,15 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = 0;
 
     // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 10;
-    public static final int kRearLeftDrivingCanId = 12;
-    public static final int kFrontRightDrivingCanId = 16;
-    public static final int kRearRightDrivingCanId = 14;
+    public static final int kFrontLeftDrivingCanId = 14; //10
+    public static final int kRearLeftDrivingCanId = 16; //12
+    public static final int kFrontRightDrivingCanId = 12; //16
+    public static final int kRearRightDrivingCanId = 10; //14
 
-    public static final int kFrontLeftTurningCanId = 11;
-    public static final int kRearLeftTurningCanId = 13;
-    public static final int kFrontRightTurningCanId = 17;
-    public static final int kRearRightTurningCanId = 15;
+    public static final int kFrontLeftTurningCanId = 15; //11
+    public static final int kRearLeftTurningCanId = 17; //13
+    public static final int kFrontRightTurningCanId = 13; //17
+    public static final int kRearRightTurningCanId = 11; //15
 
     public static final boolean kGyroReversed = true;
 

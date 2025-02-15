@@ -1,9 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
 
 import frc.robot.Library.NEO_PID;
@@ -78,7 +76,7 @@ public class Elevator {
       private final double L2Position = 90;
       private final double L3Position = 115;
       private final double L4Position = 180;
-      private final double CorralStation = 225;
+      private final double CorralStation = 120;
     }
 
     enum Position {
@@ -96,18 +94,17 @@ public class Elevator {
     // Methods
     //----------------------------------------------------------------
     public void init(){
-        ElevatorMotor.PAR.kP = 1;
-        ElevatorMotor.PAR.kI = 0;
-        ElevatorMotor.PAR.kD = 0;
+        ElevatorMotor.PAR.kP = 0.1;
+        ElevatorMotor.PAR.kI = 1e-4;
+        ElevatorMotor.PAR.kD = 1;
         ElevatorMotor.PAR.minOutputRange = -1;
         ElevatorMotor.PAR.maxOutputRange = 1;
-        ElevatorMotor.PAR.maxVelocity = 4200; //[RPM]
-        ElevatorMotor.PAR.maxAcceleration = 6000; //[RPM]
+        ElevatorMotor.PAR.maxVelocity = 500; //[RPM] was 4200
+        ElevatorMotor.PAR.maxAcceleration = 250; //[RPM] was 6000
         ElevatorMotor.PAR.allowedClosedLoopError = 0.5;
 
 
-        configFollow.follow(elevatorCan_id)
-                    .inverted(true);
+        configFollow.follow(elevatorCan_id,true);
         
         followmotor.configure(configFollow, null,null);
     }

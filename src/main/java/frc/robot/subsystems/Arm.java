@@ -94,12 +94,12 @@ public class Arm {
     //----------------------------------------------------------------
     public void init(){
         ArmMotor.PAR.kP = 0.1;
-        ArmMotor.PAR.kI = 0;
-        ArmMotor.PAR.kD = 0;
+        ArmMotor.PAR.kI = 1e-4;
+        ArmMotor.PAR.kD = 1;
         ArmMotor.PAR.minOutputRange = -1;
         ArmMotor.PAR.maxOutputRange = 1;
-        ArmMotor.PAR.maxVelocity = 4200; //[RPM]
-        ArmMotor.PAR.maxAcceleration = 6000; //[RPM]
+        ArmMotor.PAR.maxVelocity = 2000; //[RPM]
+        ArmMotor.PAR.maxAcceleration = 1000; //[RPM]
         ArmMotor.PAR.allowedClosedLoopError = 0.5;
 
     }

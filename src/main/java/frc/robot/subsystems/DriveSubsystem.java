@@ -199,6 +199,13 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
   }
 
+  public void Turn(double speed){
+    m_frontLeft.setDesiredState(new SwerveModuleState(speed, Rotation2d.fromDegrees(-45))); 
+    m_frontRight.setDesiredState(new SwerveModuleState(-speed, Rotation2d.fromDegrees(45))); 
+    m_rearLeft.setDesiredState(new SwerveModuleState(speed, Rotation2d.fromDegrees(45)));
+    m_rearRight.setDesiredState(new SwerveModuleState(-speed, Rotation2d.fromDegrees(-45))); 
+  }
+
   /**
    * Sets the swerve ModuleStates.
    *
