@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -22,13 +23,12 @@ import frc.robot.Library.*;
 
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Coral;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
     private AprilTagVisionSubsystem m_visionSubsystem;
-    private double ArmPower = 0.15;
+   
     
     private boolean hasSeen = true;
     private double currentPoint;
@@ -41,16 +41,10 @@ public class Robot extends TimedRobot {
     private FakePS4Controller Operatorcontroller = new FakePS4Controller(1);
     private FakePS4Controller Drivercontroller = new FakePS4Controller(0);
 
-    private SparkMax ElevatorMotor
-     = new SparkMax(23, MotorType.kBrushless);
-    private SparkMax followmotor = new SparkMax(24, MotorType.kBrushless);
-    private SparkMaxConfig configFollow = new SparkMaxConfig();
-    
-    //arm motor
-    private SparkMax ArmMotor = new SparkMax(25, MotorType.kBrushless);
+    Arm Arm = new Arm();
+    Elevator Elevator = new Elevator();
 
-    //coral cannon
-    private TalonFX cc = new TalonFX(21);
+    SparkMax cc = new SparkMax(25, MotorType.kBrushless);
 
     @Override
     public void robotInit() {
@@ -60,9 +54,8 @@ public class Robot extends TimedRobot {
         Transform3d cameraToRobot = new Transform3d(new Translation3d(0.15, 0, 0), new Rotation3d(0, 0, 0));
         m_visionSubsystem = new AprilTagVisionSubsystem(leftCameraName, rightCameraName, cameraToRobot);
         
-        configFollow.follow(23,true);
-        followmotor.configure(configFollow, null, null);
-
+        
+        
         currentPoint = 0;
         targetPoint = 0;
     }
@@ -89,7 +82,21 @@ public class Robot extends TimedRobot {
     /** This function is called once when teleop is enabled. */
     @Override
     public void teleopInit() {
-        
+        Arm.Armmotor.set_P(1);
+        Arm.Armmotor.set_I(0);
+        Arm.Armmotor.set_D(0);
+        Arm.Armmotor.SetZero();
+        Arm.Armmotor.set_allowedClosedLoopError(0.05);
+        Arm.Armmotor.set_maxVelocity(100);
+        Arm.Armmotor.set_maxAcceleration(500);
+  
+        Elevator.ElevatorMotor.set_P(1);
+        Elevator.ElevatorMotor.set_I(0);
+        Elevator.ElevatorMotor.set_D(0);
+        Elevator.ElevatorMotor.SetZero();;
+        Elevator.ElevatorMotor.set_allowedClosedLoopError(0.15);
+        Elevator.ElevatorMotor.set_maxVelocity(2500);
+        Elevator.ElevatorMotor.set_maxAcceleration(2500*5);
     }
 
     @Override
@@ -98,26 +105,22 @@ public class Robot extends TimedRobot {
         // Elevator
         //----------------------------------------------------------------
         // Connect controller buttons with positions
-        if(Drivercontroller.getCircleButton()){
-            //move the elevator upwards
-            ElevatorMotor.set(0.6);
-            // followmotor.set(1);
-        }else if(Drivercontroller.getSquareButton()){
-            //move the elevator downwards
-            ElevatorMotor.set(-0.2);
-            // followmotor.set(-1);
-        }else{
-            ElevatorMotor.set(0);
-            // followmotor.set(0);
-        }
+        // if(Drivercontroller.getCircleButton()){
+        //     Elevator.Setposition(0);
+        // }else if(Drivercontroller.getSquareButton()){
+        //     Elevator.Setposition(250);
+        // }
 
         if(Drivercontroller.getCrossButton()){
-            ArmMotor.set(ArmPower);
+           Arm.Setposition(0);
+        }else if(Drivercontroller.getSquareButton()){
+            Arm.Setposition(3.5);
         }else if(Drivercontroller.getTriangleButton()){
-            ArmMotor.set(-ArmPower);
-        }else{
-            ArmMotor.set(0.0);
+           Arm.Setposition(7);
+        }else if(Drivercontroller.getCircleButton()){
+          Arm.Setposition(-3.5);
         }
+
 
         if(Drivercontroller.getR1Button()){
             cc.set(0.3);
