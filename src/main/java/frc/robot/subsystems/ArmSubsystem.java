@@ -41,7 +41,7 @@ public class ArmSubsystem {
         }
 
         public void Setposition(double pos_degrees){
-                Armmotor.Set_position(pos_degrees);
+                Armmotor.Set_position(pos_degrees * 0.077777778);
         }
 
         public void Stop(){

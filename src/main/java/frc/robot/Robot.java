@@ -22,30 +22,27 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.AprilTagVisionSubsystem;
 import frc.robot.Library.*;
 
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
     private AprilTagVisionSubsystem m_visionSubsystem;
    
-    
-    private boolean hasSeen = true;
-    private double currentPoint;
-    private double targetPoint;
-    private double difference;
+    //sensor to look at the coral
     // final DigitalInput sensor = new DigitalInput(0);
 
-    private boolean hasPressed = false;
 
     private FakePS4Controller operatorController = new FakePS4Controller(1);
     private FakePS4Controller driverController = new FakePS4Controller(0);
 
+    //Arm subsystem
     ArmSubsystem Arm = new ArmSubsystem();
+    String ArmPosition = "Zero";
+
+    //Elevator subsystem
     ElevatorSubsystem Elevator = new ElevatorSubsystem();
+    String LiftPosition = "Zero";
 
     TalonFX cc = new TalonFX(21);
 
@@ -57,10 +54,22 @@ public class Robot extends TimedRobot {
         Transform3d cameraToRobot = new Transform3d(new Translation3d(0.15, 0, 0), new Rotation3d(0, 0, 0));
         m_visionSubsystem = new AprilTagVisionSubsystem(leftCameraName, rightCameraName, cameraToRobot);
         
-        
-        
-        currentPoint = 0;
-        targetPoint = 0;
+        //Initialising the arm
+        Arm.Armmotor.set_P(1);
+        Arm.Armmotor.set_I(0);
+        Arm.Armmotor.set_D(0);
+        Arm.Armmotor.SetZero();
+        Arm.Armmotor.set_allowedClosedLoopError(0.075);
+        Arm.Armmotor.set_maxVelocity(500);
+        Arm.Armmotor.set_maxAcceleration(2500);
+        //Initialising the Elevator
+        Elevator.ElevatorMotor.set_P(1);
+        Elevator.ElevatorMotor.set_I(0);
+        Elevator.ElevatorMotor.set_D(0);
+        Elevator.ElevatorMotor.SetZero();;
+        Elevator.ElevatorMotor.set_allowedClosedLoopError(0.15);
+        Elevator.ElevatorMotor.set_maxVelocity(2500);
+        Elevator.ElevatorMotor.set_maxAcceleration(2500*5);
     }
 
     @Override
@@ -85,60 +94,78 @@ public class Robot extends TimedRobot {
     /** This function is called once when teleop is enabled. */
     @Override
     public void teleopInit() {
-        Arm.Armmotor.set_P(1);
-        Arm.Armmotor.set_I(0);
-        Arm.Armmotor.set_D(0);
-        Arm.Armmotor.SetZero();
-        Arm.Armmotor.set_allowedClosedLoopError(0.05);
-        Arm.Armmotor.set_maxVelocity(500);
-        Arm.Armmotor.set_maxAcceleration(2500);
-  
-        Elevator.ElevatorMotor.set_P(1);
-        Elevator.ElevatorMotor.set_I(0);
-        Elevator.ElevatorMotor.set_D(0);
-        Elevator.ElevatorMotor.SetZero();;
-        Elevator.ElevatorMotor.set_allowedClosedLoopError(0.15);
-        Elevator.ElevatorMotor.set_maxVelocity(2500);
-        Elevator.ElevatorMotor.set_maxAcceleration(2500*5);
     }
 
     @Override
     public void teleopPeriodic() {
         //----------------------------------------------------------------
-        // Elevator
+        // Elevator & Arm
+        // Cross = down position (home position)
+        // Square = mid position (L2)
+        // Triangle = high position (L3)
+        // ... = top position (L4)
+        // Circle = intaking position (coral station)
+        // ... = low position (L1)
         //----------------------------------------------------------------
         if (driverController.getTriangleButton()){
-            //scoring top pose
-            Arm.Setposition(12); // 1 = 50 DEGREES
-            Elevator.Setposition(34);
-          }else if(driverController.getSquareButton()){
+            //scoring high pose
+            Arm.Setposition(90); // 12
+            Elevator.Setposition(231); //34
+
+            LiftPosition = "L3";
+            ArmPosition = "Scoring";
+        }else if(driverController.getSquareButton()){
             //score mid pose
-            Arm.Setposition(12);
+            Arm.Setposition(140); //12
             Elevator.Setposition(0);
-          }
-          else if(driverController.getCircleButton()){
+
+            LiftPosition = "L2";
+            ArmPosition = "Scoring";
+        }else if(driverController.getCircleButton()){
             //pickup pose
-            Arm.Setposition(-2.8);
-            Elevator.Setposition(37.5);
-          }else if(driverController.getCrossButton()){
+            Arm.Setposition(-36); // -2.8
+            Elevator.Setposition(300); //37.5
+
+            LiftPosition = "Coral Station";
+            ArmPosition = "Intaking";
+        }else if(driverController.getCrossButton()){
             //down pose
             Arm.Setposition(0);
             Elevator.Setposition(0);
-          }
+
+            LiftPosition = "Home";
+            ArmPosition = "Home";
+        }
       
-          if(driverController.getR1Button()){
-            cc.set(0.3);
-          }else if(driverController.getL1Button()){
-            cc.set(-0.3);
-          }else{
-            cc.set(0);
-          }
           
-          if(driverController.getOptionsButton()){
+        if(driverController.getOptionsButton()){
             Arm.Stop();
             Elevator.Stop();
-          }
+        }
+
+        //----------------------------------------------------------------
+        // Coral Cannon
+        // Holding R1 = Intaking coral
+        // Holding L1 = Outtaking coral
+        //----------------------------------------------------------------
+        if(driverController.getR1Button()){
+            // Spitting coral out
+            cc.set(0.3);
+        }else if(driverController.getL1Button()){
+            // Taking coral in
+            cc.set(-0.3);
+        }else{
+            // Set motor 
+            cc.set(0);
+        }
+
+
+        SmartDashboard.putString("LiftPose", LiftPosition);
+        SmartDashboard.putNumber("LiftPoint", Elevator.ElevatorMotor.STS.get_position());
         
+        SmartDashboard.putString("ArmPose", ArmPosition);
+        SmartDashboard.putNumber("ArmPoint", Arm.Armmotor.STS.get_position());
+
     }
 
     @Override

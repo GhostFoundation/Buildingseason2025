@@ -48,8 +48,8 @@ public class ElevatorSubsystem {
                 ElevatorMotor.SetZero();
         }
 
-        public void Setposition(double pos_degrees){
-                ElevatorMotor.Set_position(pos_degrees);
+        public void Setposition(double height){
+                ElevatorMotor.Set_position(height * 0.147058824);
         }
         public void Stop(){
                 motor.stopMotor();
