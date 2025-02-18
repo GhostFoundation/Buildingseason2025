@@ -109,7 +109,7 @@ public class TalonFX_PID {
     public void set_pos(double pos){
         double rotations = pos/360;
         final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
-        PAR.Motor.setControl(m_request.withPosition(10));
+        PAR.Motor.setControl(m_request.withPosition(rotations));
     }
 
 

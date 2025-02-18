@@ -8,7 +8,7 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.GenericHID;
-// @JVA 24-5-23: Raw values needs to be changed.
+
 public class FakePS4Controller extends GenericHID{
   /**
    * Construct an instance of a device.
