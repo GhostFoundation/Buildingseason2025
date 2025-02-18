@@ -66,6 +66,7 @@ public class ArmSubsystem {
     }
 
     public class par {
+        //Replace with real values! Test the values since it is relative in terms of rev
         private final double ZeroPosition = 0; //[rotations]
         private double A1Position = 1;
         private double A2Position = 2;
@@ -89,15 +90,16 @@ public class ArmSubsystem {
     // Methods
     //----------------------------------------------------------------
     public void init() {
-        //Later make them into PAR in library!
-        ArmMotor.set_P(1);
-        ArmMotor.set_I(0);
-        ArmMotor.set_D(0);
-        ArmMotor.set_FF(0);
-        ArmMotor.set_OutPutRange(-1, 1);
-        ArmMotor.set_maxVelocity(4200); //[RPM]
-        ArmMotor.set_maxAcceleration(6000); //[RPM]
-        ArmMotor.set_allowedClosedLoopError(0.5);
+        ArmMotor.PAR.P_Gain = 1;
+        ArmMotor.PAR.I_Gain = 0;
+        ArmMotor.PAR.D_Gain = 0;
+        ArmMotor.PAR.FF_Gain = 0;
+        ArmMotor.PAR.Output_Min = -1;
+        ArmMotor.PAR.Output_Max = 1;
+        ArmMotor.PAR.maxVelocity = 4200; //[RPM]
+        ArmMotor.PAR.maxAcceleration = 6000; //[RPM]
+        ArmMotor.PAR.allowedClosedLoopError = 0.5;
+        ArmMotor.setconfig();
     }
 
     public void SetZeroPosition(boolean Trigger){

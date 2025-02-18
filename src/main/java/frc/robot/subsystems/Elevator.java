@@ -18,8 +18,7 @@ public class Elevator {
     private int elevatorCan_id = 0;
     private int FollowerCan_id = 1;
 
-    private NEO_SpeedCtrl motorconfig = new NEO_SpeedCtrl(elevatorCan_id, true, false);
-    public NEO_PID ElevatorMotor = new NEO_PID(motorconfig);
+    public NEO_Absolute_PID ElevatorMotor = new NEO_Absolute_PID(new SparkMax(FollowerCan_id, MotorType.kBrushless));
     private SparkMax followmotor = new SparkMax(FollowerCan_id, MotorType.kBrushless);
     private SparkMaxConfig configFollow = new SparkMaxConfig();
 
@@ -96,11 +95,11 @@ public class Elevator {
     // Methods
     //----------------------------------------------------------------
     public void init(){
-        ElevatorMotor.PAR.kP = 1;
-        ElevatorMotor.PAR.kI = 0;
-        ElevatorMotor.PAR.kD = 0;
-        ElevatorMotor.PAR.minOutputRange = -1;
-        ElevatorMotor.PAR.maxOutputRange = 1;
+        ElevatorMotor.PAR.P_Gain = 1;
+        ElevatorMotor.PAR.I_Gain = 0;
+        ElevatorMotor.PAR.D_Gain = 0;
+        ElevatorMotor.PAR.Output_Min = -1;
+        ElevatorMotor.PAR.Output_Max = 1;
         ElevatorMotor.PAR.maxVelocity = 4200; //[RPM]
         ElevatorMotor.PAR.maxAcceleration = 6000; //[RPM]
         ElevatorMotor.PAR.allowedClosedLoopError = 0.5;
@@ -158,27 +157,27 @@ public class Elevator {
 
         switch(position) {
             case Zero: 
-              ElevatorMotor.set_pos(PAR.ZeroPosition);
+              ElevatorMotor.set_position(PAR.ZeroPosition);
               break;
 
             case L1: 
-              ElevatorMotor.set_pos(PAR.L1Position);
+              ElevatorMotor.set_position(PAR.L1Position);
               break;
 
             case L2: 
-              ElevatorMotor.set_pos(PAR.L2Position);
+              ElevatorMotor.set_position(PAR.L2Position);
               break;
 
             case L3: 
-              ElevatorMotor.set_pos(PAR.L3Position);
+              ElevatorMotor.set_position(PAR.L3Position);
               break;
 
             case L4: 
-              ElevatorMotor.set_pos(PAR.L4Position);
+              ElevatorMotor.set_position(PAR.L4Position);
               break;
 
             case CorralStation: 
-              ElevatorMotor.set_pos(PAR.CorralStation);
+              ElevatorMotor.set_position(PAR.CorralStation);
               break;
 
             default:
