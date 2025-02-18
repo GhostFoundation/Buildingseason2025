@@ -4,7 +4,12 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class NEO_Relative_PID {
@@ -24,6 +29,9 @@ public class NEO_Relative_PID {
         private double Output_Min;
         private double Output_Max;
         private double position;
+        private double maxVelocity;
+        private double maxAcceleration;
+        private double allowedClosedLoopError;
         
         /**
          * Get the Porportional gain of the PID controller
@@ -77,7 +85,7 @@ public class NEO_Relative_PID {
         * Store the current position of the encoder in STS
         */
         private void update_position(){
-            position = PAR.Encoder.getPosition()*360;
+            position = PAR.Encoder.getPosition();
         }
 
         /**
@@ -88,6 +96,16 @@ public class NEO_Relative_PID {
             update_position();
             return position;
         }
+
+        public double get_maxVelocity(){
+            return maxVelocity;
+        }
+        public double get_maxAcceleration(){
+            return maxAcceleration;
+        }
+        public double get_allowedClosedLoopError(){
+            return allowedClosedLoopError;
+        }
     }
 
     //paramaters
@@ -95,7 +113,7 @@ public class NEO_Relative_PID {
         private SparkMax motor;
         private SparkClosedLoopController PIDController;
         private RelativeEncoder Encoder;
-        
+        private FeedbackSensor Sensor_type = FeedbackSensor.kAlternateOrExternalEncoder; //for alternate encoder (both internal or external)
         /**
          * Return the PID Controller object of the motor
          * @return PID Controller object
@@ -111,6 +129,14 @@ public class NEO_Relative_PID {
         public RelativeEncoder getEncoder(){
             return Encoder;
         }
+
+        /**
+         * Return the Sensor type of the motor
+         * @return Sensor type
+         */
+        public FeedbackSensor getSensor(){
+            return Sensor_type;
+        }
     }
 
     //----------------------------------------------------------------
@@ -119,7 +145,7 @@ public class NEO_Relative_PID {
     public NEO_Relative_PID(SparkMax motor){
         PAR.motor = motor;
         PAR.PIDController = PAR.motor.getClosedLoopController();
-        PAR.Encoder = PAR.motor.getAlternateEncoder();
+        PAR.Encoder = PAR.motor.getEncoder();
     }
 
     //----------------------------------------------------------------
@@ -130,12 +156,20 @@ public class NEO_Relative_PID {
      */
     private void setconfig(){
         SparkMaxConfig config = new SparkMaxConfig();
-        config.closedLoop
+        config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
+        config
+        .closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .p(STS.P_Gain)
         .i(STS.I_Gain)
         .d(STS.D_Gain)
-        .outputRange(STS.Output_Min, STS.Output_Max)
-        .velocityFF(STS.FF_Gain);
+        .outputRange(-1, 1)
+        .maxMotion
+        // Set MAXMotion parameters for position control
+        .maxVelocity(STS.maxVelocity)
+        .maxAcceleration(STS.maxAcceleration)
+        .allowedClosedLoopError(STS.allowedClosedLoopError);
+
         PAR.motor.configure(config, null, null);
     }
 
@@ -182,6 +216,20 @@ public class NEO_Relative_PID {
         setconfig();
     }
 
+    public void set_maxVelocity(double maxVelo){
+        STS.maxVelocity = maxVelo;
+        setconfig();
+    }
+    public void set_maxAcceleration(double maxAccel){
+        STS.maxAcceleration = maxAccel;
+        setconfig();
+    }
+    public void set_allowedClosedLoopError(double allowedError){
+        STS.allowedClosedLoopError = allowedError;
+        setconfig();
+    }
+
+
     /**
      * Set the output range of the PID controller
      * @param min Minimum output value (min -1)
@@ -196,7 +244,7 @@ public class NEO_Relative_PID {
     /**
      * Set the current position of the encoder to 0
      */
-    public void set_zero_position(){
+    public void SetZero(){
         PAR.Encoder.setPosition(0);
     }
 
@@ -204,9 +252,10 @@ public class NEO_Relative_PID {
      * Go to the position of the encoder and hold it there. Updates the position variable in the mean while
      * @param pos The position on the encoder in degrees
      */
-    public void set_position(double pos) {
-        pos = pos/360; //convert degrees to rotations
-        PAR.PIDController.setReference(pos, ControlType.kPosition);
+    public void Set_position(double pos) {
+        //pos = pos/360; //convert degrees to rotations
+        SmartDashboard.putNumber("target position", pos);
+        PAR.PIDController.setReference(pos, ControlType.kMAXMotionPositionControl);
         update_position();
     }
 }
