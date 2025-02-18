@@ -24,14 +24,14 @@ public class CoralCannon {
     /**
      * Constructor for the TalonFX Speed Controller
      * @param InTrigger The Can-id of the motor
-     * @param OutTrigger 
+     * @param Bumbperbutton  
      * @param Laun
 e
      */
-    public void CannonControll(boolean InTrigger, boolean OutTrigger, boolean Laucher ) {   // nigger
+    public void CannonControll(Boolean L_Bumperbutton, Boolean R_BumperButton, boolean Laucher ) {   // nigger
 
-            Motorcannon.StateActivation(InTrigger && CoralDetecter.STS.State() == false);   // in
-            Motorcannon.StateActivation(OutTrigger && CoralDetecter.STS.State() == true);   // uit
+            Motorcannon.StateActivation(L_Bumperbutton && CoralDetecter.STS.State() == false);   // in
+            Motorcannon.StateActivation(R_BumperButton && CoralDetecter.STS.State() == true);   // uit
             
             MotorAlgea.StateActivation(Laucher);
 

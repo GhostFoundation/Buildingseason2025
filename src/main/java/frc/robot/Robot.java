@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        n_CoralCannon.CannonControll(OperatorController.getR2Button(),OperatorController.getL2Axis(), OperatorController.getCircleButton());
+        n_CoralCannon.CannonControll(OperatorController.getL1Button(),OperatorController.getR1Button(), OperatorController.getCircleButton());
     
     }
 
