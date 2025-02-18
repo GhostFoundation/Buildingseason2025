@@ -93,16 +93,29 @@ public class NEO_Absolute_PID {
             return position;
         }
 
+        /**
+         * Return the max velocity value of the PID controller
+         * @return Current position of the encoder in degrees
+         */
         public double get_maxVelocity(){
             return maxVelocity;
         }
+
+        /**
+         * Return the max acceleration value of the PID controller
+         * @return Current position of the encoder in degrees
+         */
         public double get_maxAcceleration(){
             return maxAcceleration;
         }
+
+        /**
+         * Return the allowed closed loop error value of the PID controller
+         * @return Current position of the encoder in degrees
+         */
         public double get_allowedClosedLoopError(){
             return allowedClosedLoopError;
         }
-        
     }
 
     //paramaters
@@ -110,6 +123,16 @@ public class NEO_Absolute_PID {
         private SparkMax motor;
         private SparkClosedLoopController PIDController;
         private SparkAbsoluteEncoder Encoder;
+        public double P_Gain;
+        public double I_Gain;
+        public double D_Gain;
+        public double FF_Gain;
+        public double Output_Min;
+        public double Output_Max;
+        public double position;
+        public double maxVelocity;
+        public double maxAcceleration;
+        public double allowedClosedLoopError;
         
         /**
          * Return the PID Controller object of the motor
@@ -135,6 +158,15 @@ public class NEO_Absolute_PID {
         PAR.motor = motor;
         PAR.PIDController = PAR.motor.getClosedLoopController();
         PAR.Encoder = PAR.motor.getAbsoluteEncoder();
+        STS.P_Gain = PAR.P_Gain;
+        STS.I_Gain = PAR.I_Gain;
+        STS.D_Gain = PAR.D_Gain;
+        STS.FF_Gain = PAR.FF_Gain;
+        STS.Output_Min = PAR.Output_Min;
+        STS.Output_Max = PAR.Output_Max;
+        STS.maxVelocity = PAR.maxVelocity;
+        STS.maxAcceleration = PAR.maxAcceleration;
+        STS.allowedClosedLoopError = PAR.allowedClosedLoopError;
     }
 
     //----------------------------------------------------------------
@@ -148,54 +180,8 @@ public class NEO_Absolute_PID {
         .d(STS.D_Gain)
         .outputRange(STS.Output_Min, STS.Output_Max)
         .velocityFF(STS.FF_Gain);
+
         PAR.motor.configure(config, null, null);
-    }
-
-    /**
-     * Set the Porportional gain of the PID controller
-     * @param P_gain Porportional gain value
-     */
-    public void set_P(double P_gain){
-        STS.P_Gain = P_gain;
-        setconfig();
-    }
-
-    /**
-     * Set the Integral gain of the PID controller
-     * @param I_gain Intergral gain value
-     */
-    public void set_I(double I_gain){
-        STS.I_Gain = I_gain;
-        setconfig();
-    }
-
-    /**
-     * Set the Derivative gain of the PID controller 
-     * @param D_gain Derivative gain value
-     */
-    public void set_D(double D_gain){
-        STS.D_Gain = D_gain;
-        setconfig();
-    }
-
-    /**
-     * Set the Feed Forward gain of the PID controller
-     * @param FF_gain Feed Forward gain value
-     */
-    public void set_FF(double FF_gain){
-        STS.FF_Gain = FF_gain;
-        setconfig();
-    }
-
-    /**
-     * Set the output range of the PID controller
-     * @param min Minimum output value (min -1)
-     * @param max Maximum output value (max 1)
-     */
-    public void set_OutPutRange(double min, double max){
-        STS.Output_Min = min;
-        STS.Output_Max = max;
-        setconfig();
     }
 
     /**
@@ -204,9 +190,5 @@ public class NEO_Absolute_PID {
      */
     public void set_position(double pos) {
         PAR.PIDController.setReference(pos, ControlType.kPosition);
-    }
-
-    public void set_motionposition(double pos) {
-        PAR.PIDController.setReference(pos, ControlType.kMAXMotionPositionControl);
     }
 }

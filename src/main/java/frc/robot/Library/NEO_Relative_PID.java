@@ -7,9 +7,6 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class NEO_Relative_PID {
@@ -82,13 +79,6 @@ public class NEO_Relative_PID {
         }
 
         /**
-        * Store the current position of the encoder in STS
-        */
-        private void update_position(){
-            position = PAR.Encoder.getPosition();
-        }
-
-        /**
          * Return the current position of the encoder
          * @return Current position of the encoder in degrees
          */
@@ -97,12 +87,26 @@ public class NEO_Relative_PID {
             return position;
         }
 
+        /**
+         * Return the max velocity value of the PID controller
+         * @return Current position of the encoder in degrees
+         */
         public double get_maxVelocity(){
             return maxVelocity;
         }
+
+        /**
+         * Return the max acceleration value of the PID controller
+         * @return Current position of the encoder in degrees
+         */
         public double get_maxAcceleration(){
             return maxAcceleration;
         }
+
+        /**
+         * Return the allowed closed loop error value of the PID controller
+         * @return Current position of the encoder in degrees
+         */
         public double get_allowedClosedLoopError(){
             return allowedClosedLoopError;
         }
@@ -114,6 +118,17 @@ public class NEO_Relative_PID {
         private SparkClosedLoopController PIDController;
         private RelativeEncoder Encoder;
         private FeedbackSensor Sensor_type = FeedbackSensor.kAlternateOrExternalEncoder; //for alternate encoder (both internal or external)
+        public double P_Gain;
+        public double I_Gain;
+        public double D_Gain;
+        public double FF_Gain;
+        public double Output_Min;
+        public double Output_Max;
+        public double position;
+        public double maxVelocity;
+        public double maxAcceleration;
+        public double allowedClosedLoopError;
+
         /**
          * Return the PID Controller object of the motor
          * @return PID Controller object
@@ -146,6 +161,16 @@ public class NEO_Relative_PID {
         PAR.motor = motor;
         PAR.PIDController = PAR.motor.getClosedLoopController();
         PAR.Encoder = PAR.motor.getEncoder();
+        STS.P_Gain = PAR.P_Gain;
+        STS.I_Gain = PAR.I_Gain;
+        STS.D_Gain = PAR.D_Gain;
+        STS.FF_Gain = PAR.FF_Gain;
+        STS.Output_Min = PAR.Output_Min;
+        STS.Output_Max = PAR.Output_Max;
+        STS.maxVelocity = PAR.maxVelocity;
+        STS.maxAcceleration = PAR.maxAcceleration;
+        STS.allowedClosedLoopError = PAR.allowedClosedLoopError;
+        SetZero();
     }
 
     //----------------------------------------------------------------
@@ -154,7 +179,7 @@ public class NEO_Relative_PID {
     /**
      * Apply the PID configurations to the motor
      */
-    private void setconfig(){
+    public void setconfig(){
         SparkMaxConfig config = new SparkMaxConfig();
         config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
         config
@@ -163,7 +188,8 @@ public class NEO_Relative_PID {
         .p(STS.P_Gain)
         .i(STS.I_Gain)
         .d(STS.D_Gain)
-        .outputRange(-1, 1)
+        .outputRange(STS.Output_Min, STS.Output_Max)
+
         .maxMotion
         // Set MAXMotion parameters for position control
         .maxVelocity(STS.maxVelocity)
@@ -177,68 +203,8 @@ public class NEO_Relative_PID {
      * Store the current position of the encoder in STS
      */
     private void update_position(){
-        STS.position = PAR.Encoder.getPosition()*360;
-    }
-
-    /**
-     * Set the Porportional gain of the PID controller
-     * @param P_gain Porportional gain value
-     */
-    public void set_P(double P_gain){
-        STS.P_Gain = P_gain;
-        setconfig();
-    }
-
-    /**
-     * Set the Integral gain of the PID controller
-     * @param I_gain Intergral gain value
-     */
-    public void set_I(double I_gain){
-        STS.I_Gain = I_gain;
-        setconfig();
-    }
-
-    /**
-     * Set the Derivative gain of the PID controller 
-     * @param D_gain Derivative gain value
-     */
-    public void set_D(double D_gain){
-        STS.D_Gain = D_gain;
-        setconfig();
-    }
-
-    /**
-     * Set the Feed Forward gain of the PID controller
-     * @param FF_gain Feed Forward gain value
-     */
-    public void set_FF(double FF_gain){
-        STS.FF_Gain = FF_gain;
-        setconfig();
-    }
-
-    public void set_maxVelocity(double maxVelo){
-        STS.maxVelocity = maxVelo;
-        setconfig();
-    }
-    public void set_maxAcceleration(double maxAccel){
-        STS.maxAcceleration = maxAccel;
-        setconfig();
-    }
-    public void set_allowedClosedLoopError(double allowedError){
-        STS.allowedClosedLoopError = allowedError;
-        setconfig();
-    }
-
-
-    /**
-     * Set the output range of the PID controller
-     * @param min Minimum output value (min -1)
-     * @param max Maximum output value (max 1)
-     */
-    public void set_OutPutRange(double min, double max){
-        STS.Output_Min = min;
-        STS.Output_Max = max;
-        setconfig();
+        //placed here for now because it is called in Set_position
+        STS.position = PAR.Encoder.getPosition();
     }
 
     /**
@@ -250,11 +216,10 @@ public class NEO_Relative_PID {
 
     /**
      * Go to the position of the encoder and hold it there. Updates the position variable in the mean while
-     * @param pos The position on the encoder in degrees
+     * @param pos The position on the encoder in rotations
      */
     public void Set_position(double pos) {
         //pos = pos/360; //convert degrees to rotations
-        SmartDashboard.putNumber("target position", pos);
         PAR.PIDController.setReference(pos, ControlType.kMAXMotionPositionControl);
         update_position();
     }
