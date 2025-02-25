@@ -24,9 +24,9 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = 0;
+    public static final double kFrontLeftChassisAngularOffset =Math.PI;
     public static final double kFrontRightChassisAngularOffset = 0;
-    public static final double kBackLeftChassisAngularOffset = 0;
+    public static final double kBackLeftChassisAngularOffset =  Math.PI;
     public static final double kBackRightChassisAngularOffset = 0;
 
     // SPARK MAX CAN IDs
@@ -42,19 +42,19 @@ public final class Constants {
 
     public static final boolean kGyroReversed = true;
 
-    public static final double kPDrive = 0.2;
+    public static final double kPDrive = 0.15;
     public static final double kIDrive = 0;
-    public static final double kDDrive = 0.01;
-    public static final double kPTurn = 0.75;  //0.75;
+    public static final double kDDrive = 0.1;
+    public static final double kPTurn = 0.3;  //0.75;
     public static final double kITurn = 0;
-    public static final double kDTurn = 0.8; //0.8
+    public static final double kDTurn = 0; //0.8
   }
 
   public static final class ModuleConstants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T,
     // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
     // more teeth will result in a robot that drives faster).
-    public static final int kDrivingMotorPinionTeeth = 16;
+    public static final int kDrivingMotorPinionTeeth = 12;
 
     // Calculations required for driving motor conversion factors and feed forward
     public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60;
@@ -62,7 +62,7 @@ public final class Constants {
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
     // teeth on the bevel pinion
-    public static final double kDrivingMotorReduction = (45.0 * 20) / (kDrivingMotorPinionTeeth * 15);
+    public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
     public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
         / kDrivingMotorReduction;
   }

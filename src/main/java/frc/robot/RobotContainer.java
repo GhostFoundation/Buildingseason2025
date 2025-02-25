@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -18,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Library.FakePS4Controller;
 import frc.robot.Library.FakePS4Controller.Button;
+import frc.robot.commands.CenterRobotCommand;
+import frc.robot.subsystems.AprilTagVisionSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
@@ -34,6 +37,7 @@ public class RobotContainer {
     private final Field2d field;
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final AprilTagVisionSubsystem m_visionSubsystem = new AprilTagVisionSubsystem("leftCam", "rightCam", new Transform3d());
 
   // The driver's controller
   FakePS4Controller m_driverController = new FakePS4Controller(OIConstants.kDriverControllerPort);
@@ -116,7 +120,11 @@ new JoystickButton(m_driverController, Button.kSquare.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+
+            new JoystickButton(m_driverController, Button.kCircle.value).whileTrue(new RunCommand(() ->  new CenterRobotCommand(m_robotDrive, m_visionSubsystem)));
+
   }
+    
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
