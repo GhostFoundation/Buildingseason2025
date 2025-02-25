@@ -55,21 +55,21 @@ public class Robot extends TimedRobot {
         m_visionSubsystem = new AprilTagVisionSubsystem(leftCameraName, rightCameraName, cameraToRobot);
         
         //Initialising the arm
-        Arm.Armmotor.set_P(1);
-        Arm.Armmotor.set_I(0);
-        Arm.Armmotor.set_D(0);
+        Arm.Armmotor.set_P(1);//1
+        Arm.Armmotor.set_I(0);//0
+        Arm.Armmotor.set_D(0);//0
         Arm.Armmotor.SetZero();
-        Arm.Armmotor.set_allowedClosedLoopError(0.075);
-        Arm.Armmotor.set_maxVelocity(500);
-        Arm.Armmotor.set_maxAcceleration(2500);
+        Arm.Armmotor.set_allowedClosedLoopError(0.075);//0.075
+        Arm.Armmotor.set_maxVelocity(100);//500
+        Arm.Armmotor.set_maxAcceleration(500);//2500
         //Initialising the Elevator
-        Elevator.ElevatorMotor.set_P(1);
-        Elevator.ElevatorMotor.set_I(0);
-        Elevator.ElevatorMotor.set_D(0);
+        Elevator.ElevatorMotor.set_P(1);//1
+        Elevator.ElevatorMotor.set_I(0);//0
+        Elevator.ElevatorMotor.set_D(0);//0
         Elevator.ElevatorMotor.SetZero();;
-        Elevator.ElevatorMotor.set_allowedClosedLoopError(0.15);
-        Elevator.ElevatorMotor.set_maxVelocity(2500);
-        Elevator.ElevatorMotor.set_maxAcceleration(2500*5);
+        Elevator.ElevatorMotor.set_allowedClosedLoopError(0.15);//0.15
+        Elevator.ElevatorMotor.set_maxVelocity(3000);//2500
+        Elevator.ElevatorMotor.set_maxAcceleration(3000*5);// 2500*5
     }
 
     @Override

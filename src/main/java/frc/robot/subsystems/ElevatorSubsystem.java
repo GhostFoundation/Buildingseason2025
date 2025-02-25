@@ -26,8 +26,8 @@ public class ElevatorSubsystem {
         //----------------------------------------------------------------
         // Control Modules
         //----------------------------------------------------------------
-        private SparkMax motor = new SparkMax(23, MotorType.kBrushless);
-        private SparkMax followMotor = new SparkMax(24,MotorType.kBrushless);
+        private SparkMax motor = new SparkMax(20, MotorType.kBrushless);
+        private SparkMax followMotor = new SparkMax(21,MotorType.kBrushless);
         SparkMaxConfig config = new SparkMaxConfig();
         
         public NEO_Relative_PID ElevatorMotor = new NEO_Relative_PID(motor);
@@ -36,7 +36,7 @@ public class ElevatorSubsystem {
         // Constructor
         //----------------------------------------------------------------
         public ElevatorSubsystem(){
-                config.follow(23,true);
+                config.follow(20,true);
                 followMotor.configure(config, null, null);
 
         }
