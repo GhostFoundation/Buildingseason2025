@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Library.*;
 
-public class ArmSubsystem{
+public class ArmSubsystem extends SubsystemBase{
         //----------------------------------------------------------------
         // Attributes
         //----------------------------------------------------------------
@@ -32,7 +32,14 @@ public class ArmSubsystem{
         //----------------------------------------------------------------
         // Constructor
         //----------------------------------------------------------------
-        public ArmSubsystem(){}
+        public ArmSubsystem(){
+                Armmotor.set_P(1);//1
+                Armmotor.set_I(0);//0
+                Armmotor.set_D(0);//0
+                Armmotor.set_allowedClosedLoopError(0.075);//0.075
+                Armmotor.set_maxVelocity(600);//500
+                Armmotor.set_maxAcceleration(600*5);//2500
+        }
 
         //----------------------------------------------------------------
         // Methods

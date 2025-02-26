@@ -15,13 +15,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import frc.robot.Commands.ArmCommand;
+import frc.robot.Commands.FullScoringCommand;
+import frc.robot.Commands.ScoreCommand;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Library.*;
 import frc.robot.Library.FakePS4Controller.Button;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ScoreSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -37,8 +40,9 @@ public class RobotContainer {
     private final Field2d field;
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  // private final ArmSubsystem Arm = new ArmSubsystem();
-  // private final ElevatorSubsystem Lift = new ElevatorSubsystem();
+  public final ArmSubsystem Arm = new ArmSubsystem();
+  public final ElevatorSubsystem Lift = new ElevatorSubsystem();
+  public final ScoreSubsystem cc = new ScoreSubsystem();
   
   // The driver's controller
   FakePS4Controller m_driverController = new FakePS4Controller(OIConstants.kDriverControllerPort);
@@ -51,17 +55,18 @@ public class RobotContainer {
     configureButtonBindings();
     
     //TODO check if these simple commands can run in autonomous
-    // NamedCommands.registerCommand("ARM", new ArmCommand(Arm, 140));
+    NamedCommands.registerCommand("ARM", new ArmCommand(Arm));
     // NamedCommands.registerCommand("LIFT", new ElevatorCommand(Lift, 200));
+    NamedCommands.registerCommand("Score", new ScoreCommand(cc));
     // //TODO check if these combined commands work in autonomous
-    // NamedCommands.registerCommand("ArmLiftHome", new ArmLiftCommand(Arm,Lift,"Home"));
+    //NamedCommands.registerCommand("ArmLiftHome", new ArmLiftCommand(Arm,Lift,"Home"));
     // NamedCommands.registerCommand("ArmLiftInt", new ArmLiftCommand(Arm,Lift,"Intake"));
     // NamedCommands.registerCommand("ArmLift1", new ArmLiftCommand(Arm,Lift,"L1"));
-    // NamedCommands.registerCommand("ArmLift2", new ArmLiftCommand(Arm,Lift,"L2"));
+    NamedCommands.registerCommand("ArmLift2", new FullScoringCommand(Arm,144,Lift,0,cc));
     // NamedCommands.registerCommand("ArmLift3", new ArmLiftCommand(Arm,Lift,"L3"));
     // NamedCommands.registerCommand("ArmLift4", new ArmLiftCommand(Arm,Lift,"L4"));
 
-    // NamedCommands.registerCommand("Score", getAutonomousCommand());
+    
     // Configure default commands
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.

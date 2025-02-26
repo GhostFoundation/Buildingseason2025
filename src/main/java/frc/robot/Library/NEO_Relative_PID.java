@@ -112,7 +112,7 @@ public class NEO_Relative_PID {
         private SparkMax motor;
         private SparkClosedLoopController PIDController;
         private RelativeEncoder Encoder;
-        private FeedbackSensor Sensor_type = FeedbackSensor.kAlternateOrExternalEncoder; //for alternate encoder (both internal or external)
+        private FeedbackSensor Sensor_type = FeedbackSensor.kPrimaryEncoder; //for alternate encoder (both internal or external)
         /**
          * Return the PID Controller object of the motor
          * @return PID Controller object
@@ -158,8 +158,7 @@ public class NEO_Relative_PID {
         config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
         config
         .closedLoop
-        .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder) //TODO Check if works with external encoder (relative through bore)
-        .p(STS.P_Gain)
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder) 
         .i(STS.I_Gain)
         .d(STS.D_Gain)
         .outputRange(-1, 1)

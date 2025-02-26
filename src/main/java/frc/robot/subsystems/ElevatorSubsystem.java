@@ -7,7 +7,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Library.*;
 
-public class ElevatorSubsystem{
+public class ElevatorSubsystem extends SubsystemBase{
         //----------------------------------------------------------------
         // Attributes
         //----------------------------------------------------------------
@@ -40,6 +40,12 @@ public class ElevatorSubsystem{
                 config.follow(20,true);
                 followMotor.configure(config, null, null);
 
+                ElevatorMotor.set_P(1);//1
+                ElevatorMotor.set_I(0);//0
+                ElevatorMotor.set_D(0);//0
+                ElevatorMotor.set_allowedClosedLoopError(0.15);//0.15
+                ElevatorMotor.set_maxVelocity(2000);//2500
+                ElevatorMotor.set_maxAcceleration(2000*5);// 2500*5
         }
 
         //----------------------------------------------------------------
