@@ -4,9 +4,10 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Library.*;
 
-public class ElevatorSubsystem {
+public class ElevatorSubsystem{
         //----------------------------------------------------------------
         // Attributes
         //----------------------------------------------------------------
@@ -27,7 +28,7 @@ public class ElevatorSubsystem {
         // Control Modules
         //----------------------------------------------------------------
         private SparkMax motor = new SparkMax(20, MotorType.kBrushless);
-        private SparkMax followMotor = new SparkMax(21,MotorType.kBrushless);
+        private SparkMax followMotor = new SparkMax(22,MotorType.kBrushless);
         SparkMaxConfig config = new SparkMaxConfig();
         
         public NEO_Relative_PID ElevatorMotor = new NEO_Relative_PID(motor);

@@ -1,12 +1,8 @@
 package frc.robot;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
-import javax.lang.model.util.ElementScanner14;
-
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -15,7 +11,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -29,11 +24,12 @@ public class Robot extends TimedRobot {
     private RobotContainer m_robotContainer;
     private AprilTagVisionSubsystem m_visionSubsystem;
    
-    //sensor to look at the coral
+    //sensors
     // final DigitalInput sensor = new DigitalInput(0);
+    final DigitalInput touch1 = new DigitalInput(0);
+    final DigitalInput touch2 = new DigitalInput(1);
 
-
-    private FakePS4Controller operatorController = new FakePS4Controller(1);
+    //private FakePS4Controller operatorController = new FakePS4Controller(1);
     private FakePS4Controller driverController = new FakePS4Controller(0);
 
     //Arm subsystem
@@ -43,9 +39,10 @@ public class Robot extends TimedRobot {
     //Elevator subsystem
     ElevatorSubsystem Elevator = new ElevatorSubsystem();
     String LiftPosition = "Zero";
+    boolean hasTouched = false;
 
     TalonFX cc = new TalonFX(21);
-
+   
     @Override
     public void robotInit() {
        m_robotContainer = new RobotContainer();
@@ -68,8 +65,8 @@ public class Robot extends TimedRobot {
         Elevator.ElevatorMotor.set_D(0);//0
         Elevator.ElevatorMotor.SetZero();;
         Elevator.ElevatorMotor.set_allowedClosedLoopError(0.15);//0.15
-        Elevator.ElevatorMotor.set_maxVelocity(3000);//2500
-        Elevator.ElevatorMotor.set_maxAcceleration(3000*5);// 2500*5
+        Elevator.ElevatorMotor.set_maxVelocity(2500);//2500
+        Elevator.ElevatorMotor.set_maxAcceleration(2500*5);// 2500*5
     }
 
     @Override
@@ -81,7 +78,13 @@ public class Robot extends TimedRobot {
         } catch (Exception e) {
             SmartDashboard.putString("apriltag error", e.getMessage());
         }
-
+        //TODO test this code for the touch sensors
+        if(hasTouched == false && touch1.get()==false && touch2.get() ==false){
+            Elevator.Zero();
+            hasTouched = true;
+        }else if(hasTouched == true || touch1.get() == true || touch2.get() == true){
+            hasTouched = false;
+        }
     }
 
     @Override
@@ -111,25 +114,26 @@ public class Robot extends TimedRobot {
             //scoring high pose
             Arm.Setposition(90); // 12
             Elevator.Setposition(231); //34
-
+            
             LiftPosition = "L3";
             ArmPosition = "Scoring";
         }else if(driverController.getSquareButton()){
             //score mid pose
             Arm.Setposition(140); //12
-            Elevator.Setposition(0);
+            Elevator.Setposition(450);
 
             LiftPosition = "L2";
             ArmPosition = "Scoring";
         }else if(driverController.getCircleButton()){
             //pickup pose
             Arm.Setposition(-36); // -2.8
-            Elevator.Setposition(300); //37.5
+            Elevator.Setposition(0); //37.5
 
             LiftPosition = "Coral Station";
             ArmPosition = "Intaking";
         }else if(driverController.getCrossButton()){
             //down pose
+            
             Arm.Setposition(0);
             Elevator.Setposition(0);
 
@@ -166,6 +170,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putString("ArmPose", ArmPosition);
         SmartDashboard.putNumber("ArmPoint", Arm.Armmotor.STS.get_position());
 
+        SmartDashboard.putBoolean("touch", touch1.get());
+        
     }
 
     @Override

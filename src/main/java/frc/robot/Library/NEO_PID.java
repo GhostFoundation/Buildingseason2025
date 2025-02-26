@@ -1,9 +1,6 @@
 package frc.robot.Library;
 
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.sim.SparkFlexSim;
-import com.revrobotics.sim.SparkLimitSwitchSim;
-import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.ControlType;

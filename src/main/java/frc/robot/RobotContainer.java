@@ -5,21 +5,23 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.OIConstants;
-import frc.robot.Library.FakePS4Controller;
 
+import frc.robot.Constants.OIConstants;
+import frc.robot.Library.*;
+import frc.robot.Library.FakePS4Controller.Button;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -35,7 +37,8 @@ public class RobotContainer {
     private final Field2d field;
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-
+  // private final ArmSubsystem Arm = new ArmSubsystem();
+  // private final ElevatorSubsystem Lift = new ElevatorSubsystem();
   
   // The driver's controller
   FakePS4Controller m_driverController = new FakePS4Controller(OIConstants.kDriverControllerPort);
@@ -47,7 +50,18 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     
+    //TODO check if these simple commands can run in autonomous
+    // NamedCommands.registerCommand("ARM", new ArmCommand(Arm, 140));
+    // NamedCommands.registerCommand("LIFT", new ElevatorCommand(Lift, 200));
+    // //TODO check if these combined commands work in autonomous
+    // NamedCommands.registerCommand("ArmLiftHome", new ArmLiftCommand(Arm,Lift,"Home"));
+    // NamedCommands.registerCommand("ArmLiftInt", new ArmLiftCommand(Arm,Lift,"Intake"));
+    // NamedCommands.registerCommand("ArmLift1", new ArmLiftCommand(Arm,Lift,"L1"));
+    // NamedCommands.registerCommand("ArmLift2", new ArmLiftCommand(Arm,Lift,"L2"));
+    // NamedCommands.registerCommand("ArmLift3", new ArmLiftCommand(Arm,Lift,"L3"));
+    // NamedCommands.registerCommand("ArmLift4", new ArmLiftCommand(Arm,Lift,"L4"));
 
+    // NamedCommands.registerCommand("Score", getAutonomousCommand());
     // Configure default commands
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
@@ -57,7 +71,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 
-                -MathUtil.applyDeadband(-m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
 
@@ -111,7 +125,13 @@ public class RobotContainer {
     //existing buttons
     new JoystickButton(m_driverController, Button.kShare.value).whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
-
+    //TODO check if this command actually works and does as told
+    // new JoystickButton(m_driverController, Button.kCross.value).whileTrue(new ArmLiftCommand(Arm, Lift, "L1"));
+    // new JoystickButton(m_driverController, Button.kSquare.value).whileTrue(new ArmLiftCommand(Arm, Lift, "L2"));
+    // new JoystickButton(m_driverController, Button.kTriangle.value).whileTrue(new ArmLiftCommand(Arm, Lift, "L3"));
+    // new JoystickButton(m_driverController, Button.kCircle.value).whileTrue(new ArmLiftCommand(Arm, Lift, "L4")); 
+    // new JoystickButton(m_driverController, m_driverController.getPOV(0)).whileTrue(new ArmLiftCommand(Arm, Lift, "Home")); //TODO check if the pov works
+    // new JoystickButton(m_driverController, m_driverController.getPOV(180)).whileTrue(new ArmLiftCommand(Arm, Lift, "Intake")); // TODO check if the pov works
     // new JoystickButton(m_driverController, Button.kR1.value)
     //     .whileTrue(new RunCommand(
     //         () -> m_robotDrive.setX(),

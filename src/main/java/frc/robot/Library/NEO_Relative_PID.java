@@ -7,7 +7,6 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -159,7 +158,7 @@ public class NEO_Relative_PID {
         config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
         config
         .closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder) //TODO Check if works with external encoder (relative through bore)
         .p(STS.P_Gain)
         .i(STS.I_Gain)
         .d(STS.D_Gain)

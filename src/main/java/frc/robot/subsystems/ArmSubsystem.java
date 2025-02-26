@@ -1,11 +1,12 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Library.*;
 
-public class ArmSubsystem {
+public class ArmSubsystem{
         //----------------------------------------------------------------
         // Attributes
         //----------------------------------------------------------------
@@ -25,7 +26,7 @@ public class ArmSubsystem {
         //----------------------------------------------------------------
         // Control Modules
         //----------------------------------------------------------------
-        private SparkMax motor = new SparkMax(25, MotorType.kBrushless);
+        private SparkMax motor = new SparkMax(30, MotorType.kBrushless);
         public NEO_Relative_PID Armmotor = new NEO_Relative_PID(motor);
 
         //----------------------------------------------------------------
@@ -47,5 +48,8 @@ public class ArmSubsystem {
         public void Stop(){
                 motor.stopMotor();
         }
+
+
+        
 
 }
