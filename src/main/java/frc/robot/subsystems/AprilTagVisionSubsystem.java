@@ -16,6 +16,7 @@ public class AprilTagVisionSubsystem extends SubsystemBase {
     private final PhotonCamera cameraRight;
     private final Transform3d cameraToRobot;
     private final AprilTagFieldLayout aprilTagFieldLayout;
+
                 //names: leftCam rightCam, 
                 //cameraToRobot: position and rotation of the cam relative to the center of the robot
                 //for example: 
@@ -27,7 +28,7 @@ public class AprilTagVisionSubsystem extends SubsystemBase {
         this.cameraToRobot = cameraToRobot;
         this.aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
     }
-
+    
     public Pose3d calculateRobotPose() throws Exception {
         var leftResult = cameraLeft.getLatestResult();
         var rightResult = cameraRight.getLatestResult();
@@ -75,6 +76,27 @@ public class AprilTagVisionSubsystem extends SubsystemBase {
                 throw new Exception("apriltag pose not found in field layout.");
             }
         }
+    }
+    public Pose3d aprilTagPose(){
+        var rightResult = cameraRight.getLatestResult();
+        var leftResult = cameraLeft.getLatestResult();
+        PhotonTrackedTarget leftTarget = leftResult.getBestTarget();
+        PhotonTrackedTarget rightTarget = rightResult.getBestTarget();
+        int fiducialId;
+        if (leftResult.hasTargets() && rightResult.hasTargets() && leftTarget.getFiducialId() == rightTarget.getFiducialId()) {
+            fiducialId = leftTarget.getFiducialId();
+            
+        } else if (leftResult.hasTargets()) {
+            fiducialId = leftTarget.getFiducialId();
+           
+        } else {
+            fiducialId = rightTarget.getFiducialId();
+            
+        }
+
+        Optional<Pose3d> tagPose = aprilTagFieldLayout.getTagPose(fiducialId);
+        Pose3d tagPose3d = tagPose.get();
+        return tagPose3d;
     }
 
     @Override

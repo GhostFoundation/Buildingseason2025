@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Library.FakePS4Controller;
 import frc.robot.Library.FakePS4Controller.Button;
-import frc.robot.commands.CenterRobotCommand;
+import frc.robot.commands.PositionInFrontOfAprilTagCommand;
 import frc.robot.subsystems.AprilTagVisionSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -121,7 +121,7 @@ new JoystickButton(m_driverController, Button.kSquare.value)
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-            new JoystickButton(m_driverController, Button.kCircle.value).whileTrue(new RunCommand(() ->  new CenterRobotCommand(m_robotDrive, m_visionSubsystem)));
+            new JoystickButton(m_driverController, Button.kCircle.value).whileTrue(new PositionInFrontOfAprilTagCommand(m_robotDrive, m_visionSubsystem));
 
   }
     
