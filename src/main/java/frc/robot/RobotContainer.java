@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Commands.ArmCommand;
-import frc.robot.Commands.FullScoringCommand;
+import frc.robot.Commands.ArmLiftCommand;
 import frc.robot.Commands.ScoreCommand;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Library.*;
@@ -56,15 +56,14 @@ public class RobotContainer {
     
     //TODO check if these simple commands can run in autonomous
     NamedCommands.registerCommand("ARM", new ArmCommand(Arm));
-    // NamedCommands.registerCommand("LIFT", new ElevatorCommand(Lift, 200));
     NamedCommands.registerCommand("Score", new ScoreCommand(cc));
     // //TODO check if these combined commands work in autonomous
-    //NamedCommands.registerCommand("ArmLiftHome", new ArmLiftCommand(Arm,Lift,"Home"));
-    // NamedCommands.registerCommand("ArmLiftInt", new ArmLiftCommand(Arm,Lift,"Intake"));
-    // NamedCommands.registerCommand("ArmLift1", new ArmLiftCommand(Arm,Lift,"L1"));
-    NamedCommands.registerCommand("ArmLift2", new FullScoringCommand(Arm,144,Lift,0,cc));
-    // NamedCommands.registerCommand("ArmLift3", new ArmLiftCommand(Arm,Lift,"L3"));
-    // NamedCommands.registerCommand("ArmLift4", new ArmLiftCommand(Arm,Lift,"L4"));
+    NamedCommands.registerCommand("Home", new ArmLiftCommand(Arm,0,Lift,0));
+    NamedCommands.registerCommand("Intake", new ArmLiftCommand(Arm,144,Lift,0));
+    NamedCommands.registerCommand("ArmLift1", new ArmLiftCommand(Arm,144,Lift,0));
+    NamedCommands.registerCommand("ArmLift2", new ArmLiftCommand(Arm,144,Lift,0));
+    NamedCommands.registerCommand("ArmLift3", new ArmLiftCommand(Arm,144,Lift,0));
+    NamedCommands.registerCommand("ArmLift4", new ArmLiftCommand(Arm,155,Lift,0));
 
     
     // Configure default commands

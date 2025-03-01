@@ -41,6 +41,8 @@ public class Robot extends TimedRobot {
     String LiftPosition = "Zero";
     boolean hasTouched = false;
 
+    //pressed
+    boolean haspressed = false;
     
    
     @Override
@@ -111,30 +113,35 @@ public class Robot extends TimedRobot {
         // DpadDown = Home
         // DpadUp = Intake    
         //----------------------------------------------------------------
-        if (driverController.getCrossButton()){
+        if(haspressed == false && driverController.getR1ButtonPressed()){
+            haspressed = true;
+        }else if(haspressed == true && driverController.getR1ButtonPressed()){
+            haspressed = false;
+        }
+        SmartDashboard.putBoolean("pressed", haspressed);
+        if (driverController.getCrossButton() && haspressed == false){
             //L1 pose
             m_robotContainer.Arm.Setposition(-40); // 12
             m_robotContainer.Lift.Setposition(0); //34
             
             LiftPosition = "L1";
             ArmPosition = "L1Scoring";
-        }else if(driverController.getSquareButton()){
-            //L2
-            m_robotContainer.Arm.Setposition(155
-            ); //12
+        }else if(driverController.getSquareButton() && haspressed == false){
+            //L2 pose
+            m_robotContainer.Arm.Setposition(145); //12
             m_robotContainer.Lift.Setposition(0);
 
             LiftPosition = "L2";
             ArmPosition = "L2Scoring";
-        }else if(driverController.getTriangleButton()){
-            //L3
+        }else if(driverController.getTriangleButton() && haspressed == false){
+            //L3 pose
             m_robotContainer.Arm.Setposition(145); // -2.8
             m_robotContainer.Lift.Setposition(220); //37.5
 
             LiftPosition = "L3";
             ArmPosition = "L3Scoring";
-        }else if(driverController.getCircleButton()){
-            //L4 pose
+        }else if(driverController.getCircleButton() && haspressed == false){
+            //L4 pose 
             m_robotContainer.Arm.Setposition(165);
             m_robotContainer.Lift.Setposition(525);
 
@@ -142,7 +149,38 @@ public class Robot extends TimedRobot {
             ArmPosition = "L4Scoring";
         }
         
-        else if(driverController.getPOV() == 180){
+
+        else if (driverController.getCrossButton() && haspressed == true){
+            //Algae Low
+            m_robotContainer.Arm.Setposition(75);
+                m_robotContainer.Lift.Setposition(75);
+            
+            LiftPosition = "Algae low";
+            ArmPosition = "Algae";
+        }else if(driverController.getSquareButton() && haspressed == true){
+            //Algae high
+            m_robotContainer.Arm.Setposition(75);
+            m_robotContainer.Lift.Setposition(250);
+
+            LiftPosition = "Algae high";
+            ArmPosition = "Algae";
+        }else if(driverController.getTriangleButton() && haspressed == true){
+            //Algae net
+            m_robotContainer.Arm.Setposition(145); // -2.8
+            m_robotContainer.Lift.Setposition(220); //37.5
+
+            LiftPosition = "Net";
+            ArmPosition = "Net";
+        }else if(driverController.getCircleButton() && haspressed == true){
+            //Algae processor
+            m_robotContainer.Arm.Setposition(165);
+            m_robotContainer.Lift.Setposition(525);
+
+            LiftPosition = "Processor";
+            ArmPosition = "Processor";
+        }
+
+        else if(driverController.getPOV() > 0){ //180 is down
             //Home pose
         
             m_robotContainer.Arm.Setposition(0);
@@ -150,50 +188,53 @@ public class Robot extends TimedRobot {
 
             LiftPosition = "Home";
             ArmPosition = "Home";
-        }else if(driverController.getPOV() == 0){
+        }else if(driverController.getL1Button()){
             //Intake Pose
 
-            m_robotContainer.Arm.Setposition(-25);
-            m_robotContainer.Lift.Setposition(250);
+            m_robotContainer.Arm.Setposition(-28);
+            m_robotContainer.Lift.Setposition(260);
 
             LiftPosition = "Coral Station";
             ArmPosition = "Intake";
-        }else if( driverController.getPOV() == 90){
-            m_robotContainer.Arm.Setposition(75);
-            m_robotContainer.Lift.Setposition(250);
-
-            LiftPosition = "Algae High";
-            ArmPosition = "Algae";
-        }else if(driverController.getPOV() == 270){
-            m_robotContainer.Arm.Setposition(75);
-            m_robotContainer.Lift.Setposition(75);
-
-            LiftPosition = "Algae Low";
-            ArmPosition = "Algae";
         }
+        // else if( driverController.getPOV() == 90){
+        //     //Algae high
+        //     m_robotContainer.Arm.Setposition(75);
+        //     m_robotContainer.Lift.Setposition(250);
+
+        //     LiftPosition = "Algae High";
+        //     ArmPosition = "Algae";
+        // }else if(driverController.getPOV() == 270){
+        //     //Algae low
+        //     m_robotContainer.Arm.Setposition(75);
+        //     m_robotContainer.Lift.Setposition(75);
+
+        //     LiftPosition = "Algae Low";
+        //     ArmPosition = "Algae";
+        // }
       
           
         if(driverController.getOptionsButton()){
             m_robotContainer.Arm.Stop();
             m_robotContainer.Lift.Stop();
         }
-
+    
         //----------------------------------------------------------------
         // Coral Cannon
-        // Holding R1 = Intaking coral
-        // Holding L1 = Outtaking coral
+        // Holding R2 = Intaking coral
+        // Holding L2 = Outtaking coral
         //----------------------------------------------------------------
-        if(driverController.getR1Button()){
+        if(driverController.getR2Axis() > 0){
             // Spitting coral out
             m_robotContainer.cc.setPower(0.3);
-        }else if(driverController.getL1Button()){
+        }else if(driverController.getL2Axis() > 0){
             // Taking coral in
             m_robotContainer.cc.setPower(-0.3);
         }else{
             // Set motor 
             m_robotContainer.cc.setPower(0);
         }
-
+    
 
         SmartDashboard.putString("LiftPose", LiftPosition);
         SmartDashboard.putNumber("LiftPoint", m_robotContainer.Lift.ElevatorMotor.STS.get_position());

@@ -14,11 +14,11 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class FullScoringCommand extends Command {
+public class ArmLiftCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem Arm;
   private final ElevatorSubsystem Lift;
-  private final ScoreSubsystem Cc;
+  
   public double ArmPose;
   public double LiftPose;
   public boolean Done = false;
@@ -29,16 +29,16 @@ public class FullScoringCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public FullScoringCommand(ArmSubsystem subsystem, double ArmPose, ElevatorSubsystem subsystem2, double LiftPose, ScoreSubsystem subsystem3) {
+  public ArmLiftCommand(ArmSubsystem subsystem, double ArmPose, ElevatorSubsystem subsystem2, double LiftPose) {
     this.Arm = subsystem;
     this.Lift = subsystem2;
-    this.Cc = subsystem3;
+   
 
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
     addRequirements(subsystem2);
-    addRequirements(subsystem3);
+    
   }
 
   // Called when the command is initially scheduled.
@@ -54,9 +54,6 @@ public class FullScoringCommand extends Command {
   public void execute() {
     Arm.Setposition(ArmPose);
     Lift.Setposition(LiftPose);
-    if(Arm.Armmotor.STS.get_position()- 5 > ArmPose && Lift.ElevatorMotor.STS.get_position() - 5> LiftPose){
-        Done = true;
-    }
 }
    
 
