@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,7 +27,7 @@ public class Robot extends TimedRobot {
     private ElevatorSubsystem Elevator = RobotContainer.Lift;
     private ArmSubsystem Arm = RobotContainer.Arm;
     private ScoreSubsystem CoralCannon = RobotContainer.cc;
-
+    private final Timer CoralTimer = new Timer();
    
     //sensors
     // final DigitalInput sensor = new DigitalInput(0);
@@ -47,6 +48,10 @@ public class Robot extends TimedRobot {
 
     //pressed
     boolean haspressed = false;
+
+    // CoralCanon
+    boolean CoralInserted = false;
+    Boolean TimerTrigger = false;
     
    
     @Override
@@ -99,139 +104,159 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         //----------------------------------------------------------------
         // Elevator & Arm
-        // Cross = L1
-        // Square = L2
-        // Triangle = L3
-        // Circle =  L4
-        // DpadDown = Home
-        // DpadUp = Intake    
         //----------------------------------------------------------------
+        // General
+        // - DpadDown = Home
+        // - Option   = Stop      
+        //
+        // Coral Mode               | Algae Mode
+        // - Cross    = L1          | - Cross = Algae Low
+        // - Square   = L2          | - Square = Algae High
+        // - Triangle = L3          | - Triangle = Net
+        // - Circle   = L4          | - Circle = Processor
+        // - DpadDown = Home        |
+        // - L1       = Intake      |    
+
+        // Elevator & Arm: Coral Positions
+        //#region
+        if (driverController.getCrossButton() && haspressed == false){
+            //L1 pose
+            Arm.Set_L1(-40);
+            Elevator.Set_L1(0);
+        }else if(driverController.getSquareButton() && haspressed == false){
+            //L2 pose
+            Arm.Set_L2(145);
+            Elevator.Set_L2(0);
+        }else if(driverController.getTriangleButton() && haspressed == false){
+            //L3 pose
+            Arm.Set_L3(145);
+            Elevator.Set_L3(220);
+        }else if(driverController.getCircleButton() && haspressed == false){
+            //L4 pose 
+            Arm.Set_L4(165);
+            Elevator.Set_L4(525);
+        }
+        else if(driverController.getL1Button()){
+            //Coral station
+            Arm.Set_CoralStation(-28);
+            Elevator.Set_CoralStation(260);
+        }  
+        //#endregion
+        
+        // Elevator & Arm: Algae Positions
+        //#region
+        else if (driverController.getCrossButton() && haspressed == true){
+            //Algae Low
+            Arm.Set_AlgaeLow(75);
+            Elevator.Set_AlgaeLow(75);
+        }else if(driverController.getSquareButton() && haspressed == true){
+            //Algae high
+            Arm.Set_AlgaeHigh(75);
+            Elevator.Set_AlgaeHigh(250);
+        }else if(driverController.getTriangleButton() && haspressed == true){
+            //Algae net
+            Arm.Set_AlgaeNet(145);
+            Elevator.Set_AlgaeNet(220);
+        }else if(driverController.getCircleButton() && haspressed == true){
+            //Algae processor
+            Arm.Set_AlgaeProcessor(165);
+            Elevator.Set_AlgaeProcessor(525);
+        }
+        //#endregion
+
+        // Elevator & Arm: Home
+        //#region
+        else if(driverController.getPOV() > 0){ //180 is down
+            //Home pose
+            Arm.Set_Home(0);
+            Elevator.Set_Home(0);
+        }
+        //#endregion
+
+        // Elevator & Arm: Stopped
+        //#region
+        if(driverController.getOptionsButton()){
+            Arm.Stop();
+            Elevator.Stop();
+        }
+        //#endregion
 
         // Switch with Coral scoring & Algea scoring
+        //#region
         if(haspressed == false && driverController.getR1ButtonPressed()){
             haspressed = true;
         }else if(haspressed == true && driverController.getR1ButtonPressed()){
             haspressed = false;
         }
-        
-        //----------------------------------------------------------------
-        // Coral Positions
-        //----------------------------------------------------------------
-        SmartDashboard.putBoolean("pressed", haspressed);
-        if (driverController.getCrossButton() && haspressed == false){
-            //L1 pose
-            Arm.Setposition(-40); // 12
-            Elevator.Setposition(0); //34
-            
-            LiftPosition = "L1";
-            ArmPosition = "L1Scoring";
-        }else if(driverController.getSquareButton() && haspressed == false){
-            //L2 pose
-            Arm.Setposition(145); //12
-            Elevator.Setposition(0);
-
-            LiftPosition = "L2";
-            ArmPosition = "L2Scoring";
-        }else if(driverController.getTriangleButton() && haspressed == false){
-            //L3 pose
-            Arm.Setposition(145); // -2.8
-            Elevator.Setposition(220); //37.5
-
-            LiftPosition = "L3";
-            ArmPosition = "L3Scoring";
-        }else if(driverController.getCircleButton() && haspressed == false){
-            //L4 pose 
-            Arm.Setposition(165);
-            Elevator.Setposition(525);
-
-            LiftPosition = "L4";
-            ArmPosition = "L4Scoring";
-        }
-        
-
-        else if (driverController.getCrossButton() && haspressed == true){
-            //Algae Low
-            Arm.Setposition(75);
-            Elevator.Setposition(75);
-            
-            LiftPosition = "Algae low";
-            ArmPosition = "Algae";
-        }else if(driverController.getSquareButton() && haspressed == true){
-            //Algae high
-            Arm.Setposition(75);
-            Elevator.Setposition(250);
-
-            LiftPosition = "Algae high";
-            ArmPosition = "Algae";
-        }else if(driverController.getTriangleButton() && haspressed == true){
-            //Algae net
-            Arm.Setposition(145); // -2.8
-            Elevator.Setposition(220); //37.5
-
-            LiftPosition = "Net";
-            ArmPosition = "Net";
-        }else if(driverController.getCircleButton() && haspressed == true){
-            //Algae processor
-            Arm.Setposition(165);
-            Elevator.Setposition(525);
-
-            LiftPosition = "Processor";
-            ArmPosition = "Processor";
-        }
-
-        else if(driverController.getPOV() > 0){ //180 is down
-            //Home pose
-        
-            Arm.Setposition(0);
-            Elevator.Setposition(0);
-
-            LiftPosition = "Home";
-            ArmPosition = "Home";
-        }else if(driverController.getL1Button()){
-            //Intake Pose
-
-            Arm.Setposition(-28);
-            Elevator.Setposition(260);
-
-            LiftPosition = "Coral Station";
-            ArmPosition = "Intake";
-        }  
-          
-        if(driverController.getOptionsButton()){
-            Arm.Stop();
-            Elevator.Stop();
-        }
+        //#endregion
     
         //----------------------------------------------------------------
         // Coral Cannon
-        // Holding R2 = Intaking coral
-        // Holding L2 = Outtaking coral
         //----------------------------------------------------------------
-        if(driverController.getR2Axis() > 0){
+        // - Holding L2 = Outtaking coral
+        // - Holding R2 = Intaking coral 
+        //----------------------------------------------------------------
+
+        // Coral Cannon: Outtake
+        //#region
+        if(driverController.getR2Axis() > 0 && CoralInserted == true){
+            // Automatisation after shooting out
+            if (TimerTrigger == false){
+                CoralTimer.reset();
+                CoralTimer.start();
+                TimerTrigger = true;
+            }
+            if(CoralTimer.get() > 1){
+                CoralCannon.setPower(0);
+                Arm.Set_Home(0);
+                Elevator.Set_Home(0);
+                
+                CoralTimer.stop();
+                TimerTrigger = true;
+                CoralInserted = false;
+            }
             // Spitting coral out
-            CoralCannon.setPower(0.3);
-            // TODO Automatisation after shooting out
-        }else if(driverController.getL2Axis() > 0){
-            // Taking coral in
-            CoralCannon.setPower(-0.3);
+            else{
+                CoralCannon.setPower(0.3);
+            }
+        //#endregion
+        
+        // Coral Cannon: Outtake
+        //#region
+        }else if(driverController.getL2Axis() > 0 && CoralInserted == false){
+            
             // Automatic Stop Corral
             if(CoralCannon.CoralInPosition()){
                 CoralCannon.setPower(0);
+                CoralInserted = true;
             }
+            // Taking coral in
+            else{
+                CoralCannon.setPower(-0.3);
+            }
+        //#endregion
 
-        }else{
-            // Set motor 
+        // Coral Cannon: stopped
+        //#region
+        }else{ 
             CoralCannon.setPower(0);
         }
+        //#endregion
     
-
-        SmartDashboard.putString("LiftPose", LiftPosition);
+        //----------------------------------------------------------------
+        // SmartDashboard
+        //----------------------------------------------------------------
+        //#region
+        SmartDashboard.putString("LiftPose", Elevator.STS.LiftPosition);
         SmartDashboard.putNumber("LiftPoint", Elevator.Motor.STS.get_position());
         
-        SmartDashboard.putString("ArmPose", ArmPosition);
+        SmartDashboard.putString("ArmPose", Arm.STS.ArmPosition);
         SmartDashboard.putNumber("ArmPoint", Arm.Motor.STS.get_position());
 
+        SmartDashboard.putBoolean("pressed", haspressed);
+
         //SmartDashboard.putBoolean("touch", touch1.get());
+        //#endregion
         
     }
 

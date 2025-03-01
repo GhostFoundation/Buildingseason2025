@@ -18,10 +18,14 @@ public class ArmSubsystem extends SubsystemBase{
         public class cs{}
 
         // Status
-        public class sts{}
+        public class sts{
+                public String ArmPosition;
+        }
 
         // Parameter
-        public class par{}
+        public class par{
+                private final double ArmConvertion = 0.077777778;
+        }
 
         //----------------------------------------------------------------
         // Control Modules
@@ -50,6 +54,56 @@ public class ArmSubsystem extends SubsystemBase{
 
         public void Setposition(double pos_degrees){
                 Motor.Set_position(pos_degrees * 0.077777778);
+        }
+
+        public void Set_Home(double height){
+                Motor.Set_position(height * PAR.ArmConvertion);
+                STS.ArmPosition = "Home";
+        }
+
+        public void Set_L1(double height){
+                Motor.Set_position(height * PAR.ArmConvertion);
+                STS.ArmPosition = "L1";
+        }
+
+        public void Set_L2(double height){
+                Motor.Set_position(height * PAR.ArmConvertion);
+                STS.ArmPosition = "L2";
+        }
+
+        public void Set_L3(double height){
+                Motor.Set_position(height * PAR.ArmConvertion);
+                STS.ArmPosition = "L3";
+        }
+
+        public void Set_L4(double height){
+                Motor.Set_position(height * PAR.ArmConvertion);
+                STS.ArmPosition = "L4";
+        }
+
+        public void Set_CoralStation(double height){
+                Motor.Set_position(height * PAR.ArmConvertion);
+                STS.ArmPosition = "Coral Station";
+        }
+
+        public void Set_AlgaeLow(double height){
+                Motor.Set_position(height * PAR.ArmConvertion);
+                STS.ArmPosition = "Algae Low";
+        }
+
+        public void Set_AlgaeHigh(double height){
+                Motor.Set_position(height * PAR.ArmConvertion);
+                STS.ArmPosition = "Algae High";
+        }
+
+        public void Set_AlgaeNet(double height){
+                Motor.Set_position(height * PAR.ArmConvertion);
+                STS.ArmPosition = "Algae Net";
+        }
+
+        public void Set_AlgaeProcessor(double height){
+                Motor.Set_position(height * PAR.ArmConvertion);
+                STS.ArmPosition = "Algae Processor";
         }
 
         public void Stop(){
