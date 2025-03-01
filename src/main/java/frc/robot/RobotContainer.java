@@ -40,9 +40,9 @@ public class RobotContainer {
     private final Field2d field;
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  public static final ArmSubsystem Arm = new ArmSubsystem();
-  public static final ElevatorSubsystem Lift = new ElevatorSubsystem();
-  public static final ScoreSubsystem cc = new ScoreSubsystem();
+  public ArmSubsystem Arm = new ArmSubsystem();
+  public ElevatorSubsystem Lift = new ElevatorSubsystem();
+  public ScoreSubsystem cc = new ScoreSubsystem();
   
   // The driver's controller
   FakePS4Controller m_driverController = new FakePS4Controller(OIConstants.kDriverControllerPort);

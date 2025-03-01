@@ -23,10 +23,9 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
     private AprilTagVisionSubsystem m_visionSubsystem;
-
-    private ElevatorSubsystem Elevator = RobotContainer.Lift;
-    private ArmSubsystem Arm = RobotContainer.Arm;
-    private ScoreSubsystem CoralCannon = RobotContainer.cc;
+    private ElevatorSubsystem Elevator;
+    private ArmSubsystem Arm;
+    private ScoreSubsystem CoralCannon;
     private final Timer CoralTimer = new Timer();
    
     //sensors
@@ -57,6 +56,9 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         m_robotContainer = new RobotContainer();
+        Elevator = m_robotContainer.Lift;
+        Arm = m_robotContainer.Arm;
+        CoralCannon = m_robotContainer.cc;
         String leftCameraName = "leftCam";
         String rightCameraName = "rightCam";
         Transform3d cameraToRobot = new Transform3d(new Translation3d(0.15, 0, 0), new Rotation3d(0, 0, 0));
