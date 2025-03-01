@@ -227,7 +227,6 @@ public class NEO_Relative_PID {
         setconfig();
     }
 
-
     /**
      * Set the output range of the PID controller
      * @param min Minimum output value (min -1)

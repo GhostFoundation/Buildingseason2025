@@ -27,29 +27,29 @@ public class ArmSubsystem extends SubsystemBase{
         // Control Modules
         //----------------------------------------------------------------
         private SparkMax motor = new SparkMax(30, MotorType.kBrushless);
-        public NEO_Relative_PID Armmotor = new NEO_Relative_PID(motor);
+        public NEO_Relative_PID Motor = new NEO_Relative_PID(motor);
 
         //----------------------------------------------------------------
         // Constructor
         //----------------------------------------------------------------
         public ArmSubsystem(){
-                Armmotor.set_P(1);//1
-                Armmotor.set_I(0);//0
-                Armmotor.set_D(0);//0
-                Armmotor.set_allowedClosedLoopError(0.075);//0.075
-                Armmotor.set_maxVelocity(2000);//500
-                Armmotor.set_maxAcceleration(4000);//2500
+                Motor.set_P(1);//1
+                Motor.set_I(0);//0
+                Motor.set_D(0);//0
+                Motor.set_allowedClosedLoopError(0.075);//0.075
+                Motor.set_maxVelocity(2000);//500
+                Motor.set_maxAcceleration(4000);//2500
         }
 
         //----------------------------------------------------------------
         // Methods
         //----------------------------------------------------------------
         public void Zero(){
-                Armmotor.SetZero();
+                Motor.SetZero();
         }
 
         public void Setposition(double pos_degrees){
-                Armmotor.Set_position(pos_degrees * 0.077777778);
+                Motor.Set_position(pos_degrees * 0.077777778);
         }
 
         public void Stop(){

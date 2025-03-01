@@ -31,7 +31,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         private SparkMax followMotor = new SparkMax(22,MotorType.kBrushless);
         SparkMaxConfig config = new SparkMaxConfig();
         
-        public NEO_Relative_PID ElevatorMotor = new NEO_Relative_PID(motor);
+        public NEO_Relative_PID Motor = new NEO_Relative_PID(motor);
         
         //----------------------------------------------------------------
         // Constructor
@@ -40,23 +40,23 @@ public class ElevatorSubsystem extends SubsystemBase{
                 config.follow(20,true);
                 followMotor.configure(config, null, null);
 
-                ElevatorMotor.set_P(1);//1
-                ElevatorMotor.set_I(0);//0
-                ElevatorMotor.set_D(0);//0
-                ElevatorMotor.set_allowedClosedLoopError(0.1);//0.15
-                ElevatorMotor.set_maxVelocity(2500);//2500
-                ElevatorMotor.set_maxAcceleration(1500*3);// 2500*5
+                Motor.set_P(1);//1
+                Motor.set_I(0);//0
+                Motor.set_D(0);//0
+                Motor.set_allowedClosedLoopError(0.1);//0.15
+                Motor.set_maxVelocity(2500);//2500
+                Motor.set_maxAcceleration(1500*3);// 2500*5
         }
 
         //----------------------------------------------------------------
         // Methods
         //----------------------------------------------------------------
         public void Zero(){
-                ElevatorMotor.SetZero();
+                Motor.SetZero();
         }
 
         public void Setposition(double height){
-                ElevatorMotor.Set_position(height * 0.147058824);
+                Motor.Set_position(height * 0.147058824);
         }
         public void Stop(){
                 motor.stopMotor();
