@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1 coral L4 auton (1)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LiftL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HomeLift"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1 coral L4 auton (2)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HomeArm"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Auton Folder",
+  "choreoAuto": false
+}

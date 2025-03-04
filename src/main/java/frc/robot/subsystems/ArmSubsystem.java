@@ -38,7 +38,7 @@ public class ArmSubsystem extends SubsystemBase{
                 Armmotor.set_D(0);//0
                 Armmotor.set_allowedClosedLoopError(0.075);//0.075
                 Armmotor.set_maxVelocity(2000);//500
-                Armmotor.set_maxAcceleration(4000);//2500
+                Armmotor.set_maxAcceleration(3000);//2500
         }
 
         //----------------------------------------------------------------

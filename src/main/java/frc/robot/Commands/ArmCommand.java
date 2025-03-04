@@ -13,15 +13,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ArmCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem Arm;
-
+  private final double Pose;
   private final Timer timer = new Timer();
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmCommand(ArmSubsystem subsystem) {
+  public ArmCommand(ArmSubsystem subsystem, double pose) {
     this.Arm = subsystem;
+    this.Pose = pose;
 
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -40,19 +41,19 @@ public class ArmCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Arm.Setposition(144);
+    Arm.Setposition(Pose);
 }
    
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Arm.Setposition(0);
+    
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() > 5;    
+    return timer.get() > 1;    
   }
 }

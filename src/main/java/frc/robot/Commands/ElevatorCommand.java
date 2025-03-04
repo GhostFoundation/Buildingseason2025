@@ -14,13 +14,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class ArmLiftCommand extends Command {
+public class ElevatorCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ArmSubsystem Arm;
   private final ElevatorSubsystem Lift;
   
-  public double ArmPose;
-  public double LiftPose;
+  
+  public double liftPose;
   public boolean Done = false;
 
   private final Timer timer = new Timer();
@@ -29,14 +28,13 @@ public class ArmLiftCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmLiftCommand(ArmSubsystem subsystem, double ArmPose, ElevatorSubsystem subsystem2, double LiftPose) {
-    this.Arm = subsystem;
+  public ElevatorCommand(ElevatorSubsystem subsystem2, double LiftPose) {
     this.Lift = subsystem2;
-   
+    this.liftPose = LiftPose;
 
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    
     addRequirements(subsystem2);
     
   }
@@ -51,9 +49,9 @@ public class ArmLiftCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    Arm.Setposition(ArmPose);
-    Lift.Setposition(LiftPose);
+  public void execute() {    
+    Lift.Setposition(liftPose);
+
 }
    
 

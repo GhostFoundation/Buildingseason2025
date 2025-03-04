@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -29,8 +30,10 @@ public class Robot extends TimedRobot {
     final DigitalInput touch1 = new DigitalInput(0);
     final DigitalInput touch2 = new DigitalInput(1);
 
-    //private FakePS4Controller operatorController = new FakePS4Controller(1);
     private FakePS4Controller driverController = new FakePS4Controller(0);
+    private FakePS4Controller operatorController = new FakePS4Controller(1);
+
+    static CameraServer TunnelVision;
 
     //Arm subsystem
     // ArmSubsystem Arm = new ArmSubsystem();
@@ -44,6 +47,7 @@ public class Robot extends TimedRobot {
     //pressed
     boolean haspressed = false;
     
+    boolean playerss = false;
    
     @Override
     public void robotInit() {
@@ -53,6 +57,7 @@ public class Robot extends TimedRobot {
         Transform3d cameraToRobot = new Transform3d(new Translation3d(0.15, 0, 0), new Rotation3d(0, 0, 0));
         m_visionSubsystem = new AprilTagVisionSubsystem(leftCameraName, rightCameraName, cameraToRobot);
 
+        CameraServer.startAutomaticCapture();
         //Initialising the arm
         // Arm.Armmotor.set_P(1);//1
         // Arm.Armmotor.set_I(0);//0
@@ -81,13 +86,7 @@ public class Robot extends TimedRobot {
             SmartDashboard.putString("apriltag error", e.getMessage());
         }
         
-        if(hasTouched == false && touch1.get()==false && touch2.get() ==false){
-            m_robotContainer.Lift.Stop();
-            m_robotContainer.Lift.Zero();
-            hasTouched = true;
-        }else if(hasTouched == true || touch1.get() == true || touch2.get() == true){
-            hasTouched = false;
-        }
+       
     }
 
     @Override
@@ -113,34 +112,43 @@ public class Robot extends TimedRobot {
         // DpadDown = Home
         // DpadUp = Intake    
         //----------------------------------------------------------------
-        if(haspressed == false && driverController.getR1ButtonPressed()){
+        if(hasTouched == false && touch1.get()==false && touch2.get() ==false){
+            m_robotContainer.Lift.Stop();
+            m_robotContainer.Lift.Zero();
+            hasTouched = true;
+        }else if(hasTouched == true || touch1.get() == true || touch2.get() == true){
+            hasTouched = false;
+        }
+
+/* 
+        if(haspressed == false && operatorController.getR1ButtonPressed()){
             haspressed = true;
-        }else if(haspressed == true && driverController.getR1ButtonPressed()){
+        }else if(haspressed == true && operatorController.getR1ButtonPressed()){
             haspressed = false;
         }
-        SmartDashboard.putBoolean("pressed", haspressed);
-        if (driverController.getCrossButton() && haspressed == false){
+       
+        if (operatorController.getCrossButton() && haspressed == false){
             //L1 pose
             m_robotContainer.Arm.Setposition(-40); // 12
-            m_robotContainer.Lift.Setposition(0); //34
+            m_robotContainer.Lift.Setposition(-1); //34
             
             LiftPosition = "L1";
             ArmPosition = "L1Scoring";
-        }else if(driverController.getSquareButton() && haspressed == false){
+        }else if(operatorController.getSquareButton() && haspressed == false){
             //L2 pose
             m_robotContainer.Arm.Setposition(145); //12
-            m_robotContainer.Lift.Setposition(0);
+            m_robotContainer.Lift.Setposition(-1);
 
             LiftPosition = "L2";
             ArmPosition = "L2Scoring";
-        }else if(driverController.getTriangleButton() && haspressed == false){
+        }else if(operatorController.getTriangleButton() && haspressed == false){
             //L3 pose
             m_robotContainer.Arm.Setposition(145); // -2.8
-            m_robotContainer.Lift.Setposition(220); //37.5
+            m_robotContainer.Lift.Setposition(240); //37.5
 
             LiftPosition = "L3";
             ArmPosition = "L3Scoring";
-        }else if(driverController.getCircleButton() && haspressed == false){
+        }else if(operatorController.getCircleButton() && haspressed == false){
             //L4 pose 
             m_robotContainer.Arm.Setposition(165);
             m_robotContainer.Lift.Setposition(525);
@@ -150,31 +158,117 @@ public class Robot extends TimedRobot {
         }
         
 
+        else if (operatorController.getCrossButton() && haspressed == true){
+            //Algae Low
+            m_robotContainer.Arm.Setposition(70);
+                m_robotContainer.Lift.Setposition(75);
+            
+            LiftPosition = "Algae low";
+            ArmPosition = "Algae";
+        }else if(operatorController.getSquareButton() && haspressed == true){
+            //Algae high
+            m_robotContainer.Arm.Setposition(70);
+            m_robotContainer.Lift.Setposition(300);
+
+            LiftPosition = "Algae high";
+            ArmPosition = "Algae";
+        }else if(operatorController.getTriangleButton() && haspressed == true){
+            //Algae net
+            m_robotContainer.Arm.Setposition(70); // -2.8
+            m_robotContainer.Lift.Setposition(525); //37.5
+
+            LiftPosition = "Net";
+            ArmPosition = "Net";
+        }else if(operatorController.getCircleButton() && haspressed == true){
+            //Algae processor
+            m_robotContainer.Arm.Setposition(20);
+            m_robotContainer.Lift.Setposition(-1);
+
+            LiftPosition = "Processor";
+            ArmPosition = "Processor";
+        }
+
+        else if(operatorController.getPOV() > 0){ //180 is down
+            //Home pose
+        
+            m_robotContainer.Arm.Setposition(0);
+            m_robotContainer.Lift.Setposition(-1);
+
+            LiftPosition = "Home";
+            ArmPosition = "Home";
+        }else if(operatorController.getL1Button()){
+            //Intake Pose
+
+            m_robotContainer.Arm.Setposition(-28);
+            m_robotContainer.Lift.Setposition(275);
+
+            LiftPosition = "Coral Station";
+            ArmPosition = "Intake";
+        }
+*/
+
+        if(haspressed == false && driverController.getR1ButtonPressed()){
+            haspressed = true;
+        }else if(haspressed == true && driverController.getR1ButtonPressed()){
+            haspressed = false;
+        }
+       
+        if (driverController.getCrossButton() && haspressed == false){
+            //L1 pose
+            m_robotContainer.Arm.Setposition(-40); // 12
+            m_robotContainer.Lift.Setposition(-3); //34
+            
+            LiftPosition = "L1";
+            ArmPosition = "L1Scoring";
+        }else if(driverController.getSquareButton() && haspressed == false){
+            //L2 pose
+            m_robotContainer.Arm.Setposition(145); //12
+            m_robotContainer.Lift.Setposition(-3);
+
+            LiftPosition = "L2";
+            ArmPosition = "L2Scoring";
+        }else if(driverController.getTriangleButton() && haspressed == false){
+            //L3 pose
+            m_robotContainer.Arm.Setposition(160); // -2.8
+            m_robotContainer.Lift.Setposition(195); //37.5
+
+            LiftPosition = "L3";
+            ArmPosition = "L3Scoring";
+        }else if(driverController.getCircleButton() && haspressed == false){
+            //L4 pose 
+            m_robotContainer.Arm.Setposition(160);
+            m_robotContainer.Lift.Setposition(490);
+
+            LiftPosition = "L4";
+            ArmPosition = "L4Scoring";
+        }
+        
+
         else if (driverController.getCrossButton() && haspressed == true){
             //Algae Low
-            m_robotContainer.Arm.Setposition(75);
+            m_robotContainer.Arm.Setposition(70);
                 m_robotContainer.Lift.Setposition(75);
             
             LiftPosition = "Algae low";
             ArmPosition = "Algae";
         }else if(driverController.getSquareButton() && haspressed == true){
             //Algae high
-            m_robotContainer.Arm.Setposition(75);
-            m_robotContainer.Lift.Setposition(250);
+            m_robotContainer.Arm.Setposition(70);
+            m_robotContainer.Lift.Setposition(300);
 
             LiftPosition = "Algae high";
             ArmPosition = "Algae";
         }else if(driverController.getTriangleButton() && haspressed == true){
             //Algae net
-            m_robotContainer.Arm.Setposition(145); // -2.8
-            m_robotContainer.Lift.Setposition(220); //37.5
+            m_robotContainer.Arm.Setposition(70); // -2.8
+            m_robotContainer.Lift.Setposition(525); //37.5
 
             LiftPosition = "Net";
             ArmPosition = "Net";
         }else if(driverController.getCircleButton() && haspressed == true){
             //Algae processor
-            m_robotContainer.Arm.Setposition(165);
-            m_robotContainer.Lift.Setposition(525);
+            m_robotContainer.Arm.Setposition(20);
+            m_robotContainer.Lift.Setposition(-3);
 
             LiftPosition = "Processor";
             ArmPosition = "Processor";
@@ -184,7 +278,7 @@ public class Robot extends TimedRobot {
             //Home pose
         
             m_robotContainer.Arm.Setposition(0);
-            m_robotContainer.Lift.Setposition(0);
+            m_robotContainer.Lift.Setposition(-3);
 
             LiftPosition = "Home";
             ArmPosition = "Home";
@@ -192,28 +286,16 @@ public class Robot extends TimedRobot {
             //Intake Pose
 
             m_robotContainer.Arm.Setposition(-28);
-            m_robotContainer.Lift.Setposition(260);
+            m_robotContainer.Lift.Setposition(250);
 
             LiftPosition = "Coral Station";
             ArmPosition = "Intake";
         }
-        // else if( driverController.getPOV() == 90){
-        //     //Algae high
-        //     m_robotContainer.Arm.Setposition(75);
-        //     m_robotContainer.Lift.Setposition(250);
 
-        //     LiftPosition = "Algae High";
-        //     ArmPosition = "Algae";
-        // }else if(driverController.getPOV() == 270){
-        //     //Algae low
-        //     m_robotContainer.Arm.Setposition(75);
-        //     m_robotContainer.Lift.Setposition(75);
-
-        //     LiftPosition = "Algae Low";
-        //     ArmPosition = "Algae";
-        // }
       
           
+
+
         if(driverController.getOptionsButton()){
             m_robotContainer.Arm.Stop();
             m_robotContainer.Lift.Stop();
@@ -229,10 +311,10 @@ public class Robot extends TimedRobot {
             m_robotContainer.cc.setPower(0.3);
         }else if(driverController.getL2Axis() > 0){
             // Taking coral in
-            m_robotContainer.cc.setPower(-0.3);
+            m_robotContainer.cc.setPower(-0.15);
         }else{
             // Set motor 
-            m_robotContainer.cc.setPower(0);
+            m_robotContainer.cc.setPower(-0.01);
         }
     
 
@@ -242,7 +324,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putString("ArmPose", ArmPosition);
         SmartDashboard.putNumber("ArmPoint", m_robotContainer.Arm.Armmotor.STS.get_position());
 
-        //SmartDashboard.putBoolean("touch", touch1.get());
+        SmartDashboard.putBoolean("Mode", haspressed);
+        SmartDashboard.putBoolean("Player", playerss);
         
     }
 
