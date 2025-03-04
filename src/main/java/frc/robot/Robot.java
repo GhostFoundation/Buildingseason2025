@@ -105,13 +105,20 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         //----------------------------------------------------------------
         // Elevator & Arm
-        // Cross = L1
-        // Square = L2
-        // Triangle = L3
-        // Circle =  L4
-        // DpadDown = Home
-        // DpadUp = Intake    
         //----------------------------------------------------------------
+        // General
+        // - DpadDown = Home
+        // - Option   = Stop  
+        // - L1       = Intake    
+        //
+        // Coral Mode               | Algae Mode
+        // - Cross    = L1          | - Cross = Algae Low
+        // - Square   = L2          | - Square = Algae High
+        // - Triangle = L3          | - Triangle = Net (not needed)
+        // - Circle   = L4          | - Circle = Processor (not needed)
+        
+         
+
         if(hasTouched == false && touch1.get()==false && touch2.get() ==false){
             m_robotContainer.Lift.Stop();
             m_robotContainer.Lift.Zero();

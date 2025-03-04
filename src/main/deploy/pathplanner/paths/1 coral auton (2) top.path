@@ -3,33 +3,52 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8805,
-        "y": 5.4875
+        "x": 3.978,
+        "y": 5.7995
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.65625,
-        "y": 5.9944999999999995
+        "x": 4.228,
+        "y": 5.7995
       },
       "isLocked": false,
       "linkedName": "1 coral top auton drop"
     },
     {
       "anchor": {
-        "x": 1.41375,
-        "y": 7.17425
+        "x": 3.978,
+        "y": 5.7995
       },
       "prevControl": {
-        "x": 2.09625,
-        "y": 6.45275
+        "x": 3.728,
+        "y": 5.7995
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 29.999999999999996
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 0.1,
+        "maxAcceleration": 0.1,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -41,14 +60,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.0,
     "rotation": 29.999999999999996
   },
   "reversed": false,
   "folder": "1 coral L2 & L3",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 29.999999999999996
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
