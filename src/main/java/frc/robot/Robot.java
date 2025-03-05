@@ -319,7 +319,7 @@ public class Robot extends TimedRobot {
         // Holding L2 = Outtaking coral
         //----------------------------------------------------------------
         // 
-        if(CoralTimer.get() > 2 && TimerTrigger == true){
+        if(CoralTimer.get() > 1.5 && TimerTrigger == true){
             CoralCannon.setPower(0);
             m_robotContainer.Arm.Setposition(0);
             m_robotContainer.Lift.Setposition(-5);
@@ -357,7 +357,7 @@ public class Robot extends TimedRobot {
 
         // Coral Cannon: stopped
         //#region
-        }else{ 
+        }else if(haspressed == false){ 
             CoralCannon.setPower(0);
         }
         //#endregion
@@ -366,7 +366,7 @@ public class Robot extends TimedRobot {
             CoralCannon.setPower(0.2);
         }else if(driverController.getL2Axis() > 0 && haspressed == true){
             CoralCannon.setPower(-0.5);
-        }else{
+        }else if(haspressed == true){
             CoralCannon.setPower(0);
         }
 
