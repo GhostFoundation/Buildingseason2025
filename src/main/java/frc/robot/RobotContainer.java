@@ -16,9 +16,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Commands.ArmCommand;
-import frc.robot.Commands.ArmLiftCommand;
 import frc.robot.Commands.ElevatorCommand;
+import frc.robot.Commands.IntakeCommand;
 import frc.robot.Commands.ScoreCommand;
+import frc.robot.Commands.Unused.ArmLiftCommand;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Library.*;
 import frc.robot.Library.FakePS4Controller.Button;
@@ -40,7 +41,7 @@ public class RobotContainer {
 
     private final Field2d field;
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   public final ArmSubsystem Arm = new ArmSubsystem();
   public final ElevatorSubsystem Lift = new ElevatorSubsystem();
   public final ScoreSubsystem cc = new ScoreSubsystem();
@@ -60,6 +61,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("HomeLift", new ElevatorCommand(Lift,0 ));
     
     NamedCommands.registerCommand("Score", new ScoreCommand(cc));
+    NamedCommands.registerCommand("Intake", new IntakeCommand(cc));
+    NamedCommands.registerCommand("ArmUp", new ArmCommand(Arm, 180));
 
     NamedCommands.registerCommand("ArmL2", new ArmCommand(Arm, 150));
     
@@ -69,13 +72,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("LiftL4", new ElevatorCommand(Lift,480));
     NamedCommands.registerCommand("ArmL4", new ArmCommand(Arm, 165));
 
-    // //TODO check if these combined commands work in autonomous
-    // NamedCommands.registerCommand("Home", new ArmLiftCommand(Arm,0,Lift,-3));
-    // NamedCommands.registerCommand("Intake", new ArmLiftCommand(Arm,-28,Lift,250));
-    // NamedCommands.registerCommand("ArmLift1", new ArmLiftCommand(Arm,-40,Lift,-3));
-    // NamedCommands.registerCommand("ArmLift2", new ArmLiftCommand(Arm,145,Lift,-3));
-    // NamedCommands.registerCommand("ArmLift3", new ArmLiftCommand(Arm,160,Lift,195));
-    // NamedCommands.registerCommand("ArmLift4", new ArmLiftCommand(Arm,160,Lift,490));
+    NamedCommands.registerCommand("LiftIntake", new ElevatorCommand(Lift,295));
+    NamedCommands.registerCommand("ArmIntake", new ArmCommand(Arm, -15));
 
     
     // Configure default commands

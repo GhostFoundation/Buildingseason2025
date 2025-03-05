@@ -61,5 +61,8 @@ public class ElevatorSubsystem extends SubsystemBase{
         public void Stop(){
                 motor.stopMotor();
         }
+        public double getPose(){
+                return ElevatorMotor.STS.get_position() * 0.147058824;
+        }
 
 }

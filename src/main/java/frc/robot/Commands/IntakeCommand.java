@@ -5,22 +5,14 @@
 package frc.robot.Commands;
 
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ScoreSubsystem;
-
-import com.ctre.phoenix6.controls.DutyCycleOut;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class ElevatorCommand extends Command {
+public class IntakeCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ElevatorSubsystem Lift;
-  
-  
-  public double liftPose;
-  public boolean Done = false;
+  private final ScoreSubsystem Cannon;
 
   private final Timer timer = new Timer();
   /**
@@ -28,15 +20,13 @@ public class ElevatorCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ElevatorCommand(ElevatorSubsystem subsystem2, double LiftPose) {
-    this.Lift = subsystem2;
-    this.liftPose = LiftPose;
+  public IntakeCommand(ScoreSubsystem subsystem) {
+    this.Cannon = subsystem;
 
 
     // Use addRequirements() here to declare subsystem dependencies.
-    
-    addRequirements(subsystem2);
-    
+    addRequirements(subsystem);
+
   }
 
   // Called when the command is initially scheduled.
@@ -49,23 +39,20 @@ public class ElevatorCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {    
-    Lift.Setposition(liftPose);
-
+  public void execute() {
+    Cannon.setPower(-0.2);
 }
    
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+    Cannon.setPower(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() > 1.5;    
+    return timer.get() > 1;    
   }
-
-
 }

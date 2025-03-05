@@ -55,6 +55,9 @@ public class ArmSubsystem extends SubsystemBase{
         public void Stop(){
                 motor.stopMotor();
         }
+        public double getPose(){
+                return Armmotor.STS.get_position() * 0.077777778;
+        }
 
 
         

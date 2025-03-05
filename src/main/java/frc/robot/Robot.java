@@ -116,7 +116,11 @@ public class Robot extends TimedRobot {
         // - Square   = L2          | - Square = Algae High
         // - Triangle = L3          | - Triangle = Net (not needed)
         // - Circle   = L4          | - Circle = Processor (not needed)
-        
+        SmartDashboard.putNumber("getAngle", m_robotContainer.m_robotDrive.m_gyro.getAngle());
+        SmartDashboard.putNumber("rawGyroX", m_robotContainer.m_robotDrive.m_gyro.getRawGyroX());
+        SmartDashboard.putNumber("rawGyroZ", m_robotContainer.m_robotDrive.m_gyro.getRawGyroZ());
+        SmartDashboard.putNumber("rawGyroY", m_robotContainer.m_robotDrive.m_gyro.getRawGyroY());
+        SmartDashboard.putNumber("getPitch", m_robotContainer.m_robotDrive.m_gyro.getPitch());
          
 
         if(hasTouched == false && touch1.get()==false && touch2.get() ==false){
@@ -244,7 +248,7 @@ public class Robot extends TimedRobot {
         }else if(driverController.getCircleButton() && haspressed == false){
             //L4 pose 
             m_robotContainer.Arm.Setposition(160);
-            m_robotContainer.Lift.Setposition(490);
+            m_robotContainer.Lift.Setposition(480);
 
             LiftPosition = "L4";
             ArmPosition = "L4Scoring";
@@ -292,8 +296,8 @@ public class Robot extends TimedRobot {
         }else if(driverController.getL1Button()){
             //Intake Pose
 
-            m_robotContainer.Arm.Setposition(-28);
-            m_robotContainer.Lift.Setposition(250);
+            m_robotContainer.Arm.Setposition(-15);//-28
+            m_robotContainer.Lift.Setposition(295);
 
             LiftPosition = "Coral Station";
             ArmPosition = "Intake";
@@ -325,11 +329,10 @@ public class Robot extends TimedRobot {
         }
     
 
-        SmartDashboard.putString("LiftPose", LiftPosition);
-        SmartDashboard.putNumber("LiftPoint", m_robotContainer.Lift.ElevatorMotor.STS.get_position());
         
-        SmartDashboard.putString("ArmPose", ArmPosition);
-        SmartDashboard.putNumber("ArmPoint", m_robotContainer.Arm.Armmotor.STS.get_position());
+        SmartDashboard.putNumber("LiftPoint", m_robotContainer.Lift.getPose());
+        
+        SmartDashboard.putNumber("ArmPoint", m_robotContainer.Arm.getPose());
 
         SmartDashboard.putBoolean("Mode", haspressed);
         SmartDashboard.putBoolean("Player", playerss);
@@ -346,8 +349,10 @@ public class Robot extends TimedRobot {
 
     @Override
   public void autonomousInit() {
+    m_robotContainer.m_robotDrive.StraightHeading();
+    m_robotContainer.Arm.Setposition(0);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
