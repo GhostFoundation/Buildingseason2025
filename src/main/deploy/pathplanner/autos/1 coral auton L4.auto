@@ -7,7 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ArmL4"
+            "name": "ArmUp"
           }
         },
         {
@@ -25,7 +25,19 @@
         {
           "type": "named",
           "data": {
+            "name": "ArmL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmUp"
           }
         },
         {

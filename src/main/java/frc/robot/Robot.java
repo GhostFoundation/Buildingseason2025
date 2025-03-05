@@ -11,11 +11,11 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.AprilTagVisionSubsystem;
 import frc.robot.Library.*;
 
 import frc.robot.subsystems.*;
@@ -23,7 +23,9 @@ import frc.robot.subsystems.*;
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
+    ScoreSubsystem CoralCannon;
     private AprilTagVisionSubsystem m_visionSubsystem;
+    private final Timer CoralTimer = new Timer();
    
     //sensors
     // final DigitalInput sensor = new DigitalInput(0);
@@ -48,6 +50,10 @@ public class Robot extends TimedRobot {
     boolean haspressed = false;
     
     boolean playerss = false;
+
+    // CoralCanon
+    boolean CoralInserted = false;
+    Boolean TimerTrigger = false;
    
     @Override
     public void robotInit() {
@@ -56,7 +62,7 @@ public class Robot extends TimedRobot {
         String rightCameraName = "rightCam";
         Transform3d cameraToRobot = new Transform3d(new Translation3d(0.15, 0, 0), new Rotation3d(0, 0, 0));
         m_visionSubsystem = new AprilTagVisionSubsystem(leftCameraName, rightCameraName, cameraToRobot);
-
+        CoralCannon = m_robotContainer.cc;
         CameraServer.startAutomaticCapture();
         //Initialising the arm
         // Arm.Armmotor.set_P(1);//1
@@ -86,7 +92,14 @@ public class Robot extends TimedRobot {
             SmartDashboard.putString("apriltag error", e.getMessage());
         }
         
-       
+        if(hasTouched == false && touch1.get()==false && touch2.get() ==false){
+            m_robotContainer.Lift.Stop();
+            m_robotContainer.Lift.Zero();
+            hasTouched = true;
+        }else if(hasTouched == true || touch1.get() == true || touch2.get() == true){
+            hasTouched = false;
+        }
+        
     }
 
     @Override
@@ -116,20 +129,8 @@ public class Robot extends TimedRobot {
         // - Square   = L2          | - Square = Algae High
         // - Triangle = L3          | - Triangle = Net (not needed)
         // - Circle   = L4          | - Circle = Processor (not needed)
-        SmartDashboard.putNumber("getAngle", m_robotContainer.m_robotDrive.m_gyro.getAngle());
-        SmartDashboard.putNumber("rawGyroX", m_robotContainer.m_robotDrive.m_gyro.getRawGyroX());
-        SmartDashboard.putNumber("rawGyroZ", m_robotContainer.m_robotDrive.m_gyro.getRawGyroZ());
-        SmartDashboard.putNumber("rawGyroY", m_robotContainer.m_robotDrive.m_gyro.getRawGyroY());
-        SmartDashboard.putNumber("getPitch", m_robotContainer.m_robotDrive.m_gyro.getPitch());
-         
-
-        if(hasTouched == false && touch1.get()==false && touch2.get() ==false){
-            m_robotContainer.Lift.Stop();
-            m_robotContainer.Lift.Zero();
-            hasTouched = true;
-        }else if(hasTouched == true || touch1.get() == true || touch2.get() == true){
-            hasTouched = false;
-        }
+        
+        
 
 /* 
         if(haspressed == false && operatorController.getR1ButtonPressed()){
@@ -227,27 +228,27 @@ public class Robot extends TimedRobot {
         if (driverController.getCrossButton() && haspressed == false){
             //L1 pose
             m_robotContainer.Arm.Setposition(-40); // 12
-            m_robotContainer.Lift.Setposition(-3); //34
+            m_robotContainer.Lift.Setposition(-5); //34
             
             LiftPosition = "L1";
             ArmPosition = "L1Scoring";
         }else if(driverController.getSquareButton() && haspressed == false){
             //L2 pose
             m_robotContainer.Arm.Setposition(145); //12
-            m_robotContainer.Lift.Setposition(-3);
+            m_robotContainer.Lift.Setposition(-5);
 
             LiftPosition = "L2";
             ArmPosition = "L2Scoring";
         }else if(driverController.getTriangleButton() && haspressed == false){
             //L3 pose
             m_robotContainer.Arm.Setposition(160); // -2.8
-            m_robotContainer.Lift.Setposition(195); //37.5
+            m_robotContainer.Lift.Setposition(170); //37.5
 
             LiftPosition = "L3";
             ArmPosition = "L3Scoring";
         }else if(driverController.getCircleButton() && haspressed == false){
             //L4 pose 
-            m_robotContainer.Arm.Setposition(160);
+            m_robotContainer.Arm.Setposition(170);
             m_robotContainer.Lift.Setposition(480);
 
             LiftPosition = "L4";
@@ -279,7 +280,7 @@ public class Robot extends TimedRobot {
         }else if(driverController.getCircleButton() && haspressed == true){
             //Algae processor
             m_robotContainer.Arm.Setposition(20);
-            m_robotContainer.Lift.Setposition(-3);
+            m_robotContainer.Lift.Setposition(-5);
 
             LiftPosition = "Processor";
             ArmPosition = "Processor";
@@ -289,7 +290,7 @@ public class Robot extends TimedRobot {
             //Home pose
         
             m_robotContainer.Arm.Setposition(0);
-            m_robotContainer.Lift.Setposition(-3);
+            m_robotContainer.Lift.Setposition(-5);
 
             LiftPosition = "Home";
             ArmPosition = "Home";
@@ -317,18 +318,61 @@ public class Robot extends TimedRobot {
         // Holding R2 = Intaking coral
         // Holding L2 = Outtaking coral
         //----------------------------------------------------------------
-        if(driverController.getR2Axis() > 0){
-            // Spitting coral out
-            m_robotContainer.cc.setPower(0.3);
-        }else if(driverController.getL2Axis() > 0){
-            // Taking coral in
-            m_robotContainer.cc.setPower(-0.15);
-        }else{
-            // Set motor 
-            m_robotContainer.cc.setPower(-0.01);
+        // 
+        if(CoralTimer.get() > 2 && TimerTrigger == true){
+            CoralCannon.setPower(0);
+            m_robotContainer.Arm.Setposition(0);
+            m_robotContainer.Lift.Setposition(-5);
+            
+            CoralTimer.stop();
+            TimerTrigger = false;
+            CoralInserted = false;
         }
-    
+        
+        if(driverController.getR2Axis() > 0 && CoralInserted == true && haspressed == false){
+            // Automatisation after shooting out
+            if (TimerTrigger == false){
+                CoralTimer.reset();
+                CoralTimer.start();
+                TimerTrigger = true;
+            }
+                CoralCannon.setPower(0.3);
 
+        //#endregion
+        
+        // Coral Cannon: Outtake
+        //#region
+        }else if(driverController.getL2Axis() > 0 && CoralInserted == false && haspressed == false){
+            
+            // Automatic Stop Corral
+            if(CoralCannon.CoralInPosition()){
+                CoralCannon.setPower(0);
+                CoralInserted = true;
+            }
+            // Taking coral in
+            else{
+                CoralCannon.setPower(-0.3);
+            }
+        //#endregion
+
+        // Coral Cannon: stopped
+        //#region
+        }else{ 
+            CoralCannon.setPower(0);
+        }
+        //#endregion
+        
+        if(driverController.getR2Axis() > 0 && haspressed == true){
+            CoralCannon.setPower(0.2);
+        }else if(driverController.getL2Axis() > 0 && haspressed == true){
+            CoralCannon.setPower(-0.5);
+        }else{
+            CoralCannon.setPower(0);
+        }
+
+        SmartDashboard.putBoolean("Inserted", CoralInserted);
+        SmartDashboard.putNumber("Current", CoralCannon.Current());
+        SmartDashboard.putNumber("Timer", CoralTimer.get());
         
         SmartDashboard.putNumber("LiftPoint", m_robotContainer.Lift.getPose());
         

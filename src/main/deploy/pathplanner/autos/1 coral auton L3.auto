@@ -7,7 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ArmL3"
+            "name": "ArmUp"
           }
         },
         {
@@ -25,7 +25,19 @@
         {
           "type": "named",
           "data": {
+            "name": "ArmL3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmUp"
           }
         },
         {
@@ -44,6 +56,12 @@
           "type": "named",
           "data": {
             "name": "HomeArm"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
           }
         }
       ]

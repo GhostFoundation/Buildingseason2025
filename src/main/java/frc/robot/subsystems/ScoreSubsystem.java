@@ -14,4 +14,19 @@ public class ScoreSubsystem extends SubsystemBase{
         Cannon.setNeutralMode(NeutralModeValue.Brake);
         Cannon.set(power);
     }
+
+    public boolean CoralInPosition(){
+        var StatorCurrent       = Cannon.getStatorCurrent();
+        double GetStatorCurrent = StatorCurrent.getValueAsDouble();
+
+        if(GetStatorCurrent > 100){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public double Current(){
+        return Cannon.getStatorCurrent().getValueAsDouble();
+    }
 }

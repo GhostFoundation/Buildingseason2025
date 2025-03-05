@@ -67,10 +67,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("ArmL2", new ArmCommand(Arm, 150));
     
     NamedCommands.registerCommand("LiftL3", new ElevatorCommand(Lift,180));
-    NamedCommands.registerCommand("ArmL3", new ArmCommand(Arm, 155));
+    NamedCommands.registerCommand("ArmL3", new ArmCommand(Arm, 160));
     
     NamedCommands.registerCommand("LiftL4", new ElevatorCommand(Lift,480));
-    NamedCommands.registerCommand("ArmL4", new ArmCommand(Arm, 165));
+    NamedCommands.registerCommand("ArmL4", new ArmCommand(Arm, 170));
 
     NamedCommands.registerCommand("LiftIntake", new ElevatorCommand(Lift,295));
     NamedCommands.registerCommand("ArmIntake", new ArmCommand(Arm, -15));

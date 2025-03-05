@@ -7,37 +7,43 @@
         {
           "type": "named",
           "data": {
-            "name": "ArmL2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "1 coral auton (1) top"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Score"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "1 coral auton (2) top"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "HomeArm"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 coral auton right (1st)"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 coral auton right (2nd)"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1 piece right (1st)"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Auton Folder",
+  "folder": "2 coral auton",
   "choreoAuto": false
 }

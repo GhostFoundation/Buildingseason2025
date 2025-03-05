@@ -53,13 +53,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "HomeLift"
+                  "name": "ArmUp"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ArmUp"
+                  "name": "HomeLift"
                 }
               }
             ]
@@ -107,6 +107,60 @@
           "type": "named",
           "data": {
             "name": "Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 coral auton right (4th)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmUp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 coral auton right (5th)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LiftL3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ArmL3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 coral auton right (6th)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HomeArm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HomeLift"
           }
         }
       ]

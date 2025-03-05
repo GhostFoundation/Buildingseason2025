@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.254444444444444,
-        "y": 7.60965811965812
+        "x": 3.4977777777777765,
+        "y": 2.5044444444444447
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.965470085470084,
-        "y": 6.66017094017094
+        "x": 3.6491452991452986,
+        "y": 2.807179487179486
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "right 2 coral stoppoint 2"
     },
     {
       "anchor": {
-        "x": 5.135299145299144,
-        "y": 5.738205128205128
+        "x": 3.6246388673084646,
+        "y": 2.711962574553528
       },
       "prevControl": {
-        "x": 5.864615384615384,
-        "y": 5.889572649572649
+        "x": 3.3907072433768413,
+        "y": 2.3129027454936995
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "right 2 coral scorepoint 2"
     }
   ],
   "rotationTargets": [],
@@ -35,20 +35,20 @@
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 270.0,
-    "maxAngularAcceleration": 540.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -29.999999999999996
+    "rotation": 150.0
   },
   "reversed": false,
   "folder": "2 coral autons",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 150.0
   },
   "useDefaultConstraints": true
 }
