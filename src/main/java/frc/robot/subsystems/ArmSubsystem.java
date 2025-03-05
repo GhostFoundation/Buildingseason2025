@@ -137,6 +137,7 @@ public class ArmSubsystem {
         }
     }
 
+    //not sure if needed
     public void SetA5(boolean Trigger){
         STS.A5Trigger = Trigger;
         if (STS.A5Trigger) {
