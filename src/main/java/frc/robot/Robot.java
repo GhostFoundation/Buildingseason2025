@@ -28,9 +28,9 @@ public class Robot extends TimedRobot {
     private final Timer CoralTimer = new Timer();
    
     //sensors
-    // final DigitalInput sensor = new DigitalInput(0);
     final DigitalInput touch1 = new DigitalInput(0);
     final DigitalInput touch2 = new DigitalInput(1);
+    // final DigitalInput sensor = new DigitalInput(2);
 
     private FakePS4Controller driverController = new FakePS4Controller(0);
     private FakePS4Controller operatorController = new FakePS4Controller(1);
@@ -53,7 +53,8 @@ public class Robot extends TimedRobot {
 
     // CoralCanon
     boolean CoralInserted = false;
-    Boolean TimerTrigger = false;
+    boolean TimerTrigger = false;
+    boolean ShotOut = false;
    
     @Override
     public void robotInit() {
@@ -87,8 +88,9 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         try {
             Pose3d robotPose = m_visionSubsystem.calculateRobotPose();
-            SmartDashboard.putString("robot pose according to apriltags", robotPose.toString());
+            //SmartDashboard.putString("robot pose according to apriltags", robotPose.toString());
         } catch (Exception e) {
+            //
             SmartDashboard.putString("apriltag error", e.getMessage());
         }
         
@@ -225,28 +227,28 @@ public class Robot extends TimedRobot {
             haspressed = false;
         }
        
-        if (driverController.getCrossButton() && haspressed == false){
+        if (operatorController.getCrossButton() && haspressed == false){
             //L1 pose
             m_robotContainer.Arm.Setposition(-40); // 12
             m_robotContainer.Lift.Setposition(-5); //34
             
             LiftPosition = "L1";
             ArmPosition = "L1Scoring";
-        }else if(driverController.getSquareButton() && haspressed == false){
+        }else if(operatorController.getSquareButton() && haspressed == false){
             //L2 pose
             m_robotContainer.Arm.Setposition(145); //12
             m_robotContainer.Lift.Setposition(-5);
 
             LiftPosition = "L2";
             ArmPosition = "L2Scoring";
-        }else if(driverController.getTriangleButton() && haspressed == false){
+        }else if(operatorController.getTriangleButton() && haspressed == false){
             //L3 pose
-            m_robotContainer.Arm.Setposition(160); // -2.8
+            m_robotContainer.Arm.Setposition(155); // -2.8
             m_robotContainer.Lift.Setposition(170); //37.5
 
             LiftPosition = "L3";
             ArmPosition = "L3Scoring";
-        }else if(driverController.getCircleButton() && haspressed == false){
+        }else if(operatorController.getCircleButton() && haspressed == false){
             //L4 pose 
             m_robotContainer.Arm.Setposition(170);
             m_robotContainer.Lift.Setposition(480);
@@ -256,37 +258,38 @@ public class Robot extends TimedRobot {
         }
         
 
-        else if (driverController.getCrossButton() && haspressed == true){
+        else if (operatorController.getSquareButton() && haspressed == true){
             //Algae Low
             m_robotContainer.Arm.Setposition(70);
                 m_robotContainer.Lift.Setposition(75);
             
             LiftPosition = "Algae low";
             ArmPosition = "Algae";
-        }else if(driverController.getSquareButton() && haspressed == true){
+        }else if(operatorController.getTriangleButton() && haspressed == true){
             //Algae high
             m_robotContainer.Arm.Setposition(70);
             m_robotContainer.Lift.Setposition(300);
 
             LiftPosition = "Algae high";
             ArmPosition = "Algae";
-        }else if(driverController.getTriangleButton() && haspressed == true){
-            //Algae net
-            m_robotContainer.Arm.Setposition(70); // -2.8
-            m_robotContainer.Lift.Setposition(525); //37.5
-
-            LiftPosition = "Net";
-            ArmPosition = "Net";
-        }else if(driverController.getCircleButton() && haspressed == true){
-            //Algae processor
-            m_robotContainer.Arm.Setposition(20);
-            m_robotContainer.Lift.Setposition(-5);
-
-            LiftPosition = "Processor";
-            ArmPosition = "Processor";
         }
+        // else if(driverController.getTriangleButton() && haspressed == true){
+        //     //Algae net
+        //     m_robotContainer.Arm.Setposition(70); // -2.8
+        //     m_robotContainer.Lift.Setposition(525); //37.5
 
-        else if(driverController.getPOV() > 0){ //180 is down
+        //     LiftPosition = "Net";
+        //     ArmPosition = "Net";
+        // }else if(driverController.getCircleButton() && haspressed == true){
+        //     //Algae processor
+        //     m_robotContainer.Arm.Setposition(20);
+        //     m_robotContainer.Lift.Setposition(-5);
+
+        //     LiftPosition = "Processor";
+        //     ArmPosition = "Processor";
+        // }
+
+        else if(operatorController.getPOV() > 0){ //180 is down
             //Home pose
         
             m_robotContainer.Arm.Setposition(0);
@@ -294,11 +297,11 @@ public class Robot extends TimedRobot {
 
             LiftPosition = "Home";
             ArmPosition = "Home";
-        }else if(driverController.getL1Button()){
+        }else if(operatorController.getL1Button()){
             //Intake Pose
 
             m_robotContainer.Arm.Setposition(-15);//-28
-            m_robotContainer.Lift.Setposition(295);
+            m_robotContainer.Lift.Setposition(315);
 
             LiftPosition = "Coral Station";
             ArmPosition = "Intake";
@@ -319,16 +322,19 @@ public class Robot extends TimedRobot {
         // Holding L2 = Outtaking coral
         //----------------------------------------------------------------
         // 
-        if(CoralTimer.get() > 1.5 && TimerTrigger == true){
+        if(CoralTimer.get() > 1 && TimerTrigger == true){
             CoralCannon.setPower(0);
             m_robotContainer.Arm.Setposition(0);
             m_robotContainer.Lift.Setposition(-5);
             
             CoralTimer.stop();
             TimerTrigger = false;
-            CoralInserted = false;
+           
         }
-        
+        if(CoralTimer.get() > 1 && ShotOut == true){
+            CoralInserted = false;
+            ShotOut = false;
+        }
         if(driverController.getR2Axis() > 0 && CoralInserted == true && haspressed == false){
             // Automatisation after shooting out
             if (TimerTrigger == false){
@@ -337,6 +343,9 @@ public class Robot extends TimedRobot {
                 TimerTrigger = true;
             }
                 CoralCannon.setPower(0.3);
+                ShotOut = true;
+            
+                
 
         //#endregion
         
@@ -348,10 +357,17 @@ public class Robot extends TimedRobot {
             if(CoralCannon.CoralInPosition()){
                 CoralCannon.setPower(0);
                 CoralInserted = true;
+                // Automatisation after shooting out
+                if (TimerTrigger == false){
+                    CoralTimer.reset();
+                    CoralTimer.start();
+                    TimerTrigger = true;
+                }
             }
             // Taking coral in
             else{
                 CoralCannon.setPower(-0.3);
+                
             }
         //#endregion
 
@@ -361,7 +377,13 @@ public class Robot extends TimedRobot {
             CoralCannon.setPower(0);
         }
         //#endregion
+
         
+        
+
+
+        //Algae
+        //#region
         if(driverController.getR2Axis() > 0 && haspressed == true){
             CoralCannon.setPower(0.2);
         }else if(driverController.getL2Axis() > 0 && haspressed == true){
@@ -369,17 +391,20 @@ public class Robot extends TimedRobot {
         }else if(haspressed == true){
             CoralCannon.setPower(0);
         }
+        //#endregion
+        
 
         SmartDashboard.putBoolean("Inserted", CoralInserted);
-        SmartDashboard.putNumber("Current", CoralCannon.Current());
+        // SmartDashboard.putNumber("Current", CoralCannon.Current());
         SmartDashboard.putNumber("Timer", CoralTimer.get());
         
-        SmartDashboard.putNumber("LiftPoint", m_robotContainer.Lift.getPose());
+        // SmartDashboard.putNumber("LiftPoint", m_robotContainer.Lift.getPose());
         
-        SmartDashboard.putNumber("ArmPoint", m_robotContainer.Arm.getPose());
+        // SmartDashboard.putNumber("ArmPoint", m_robotContainer.Arm.getPose());
 
+        
         SmartDashboard.putBoolean("Mode", haspressed);
-        SmartDashboard.putBoolean("Player", playerss);
+        //SmartDashboard.putBoolean("Player", playerss);
         
     }
 

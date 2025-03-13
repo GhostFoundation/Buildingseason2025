@@ -85,8 +85,8 @@ public class DriveSubsystem extends SubsystemBase {
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(1, 0, 0), // Translation PID constants
-                    new PIDConstants(1, 0, 0.1) // Rotation PID constants
+                    new PIDConstants(1, 0, 0.25), // Translation PID constants
+                    new PIDConstants(0, 0, 0) // Rotation PID constants
             ),
             config, // The robot configuration
             () -> {
@@ -109,12 +109,12 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("holonomic?", AutoBuilder.isHolonomic());
-    SmartDashboard.putString("Gyro Angle", m_gyro.getAngle() + "");
-    SmartDashboard.putString("Gyro Yaw", m_gyro.getYaw() + "");
-    SmartDashboard.putBoolean("Gyro Connected", m_gyro.isConnected());
-    SmartDashboard.putBoolean("Gyro Calibrating", m_gyro.isCalibrating());
-    SmartDashboard.putString("pose", m_odometry.getPoseMeters().toString());
+    // SmartDashboard.putBoolean("holonomic?", AutoBuilder.isHolonomic());
+    // SmartDashboard.putString("Gyro Angle", m_gyro.getAngle() + "");
+    // SmartDashboard.putString("Gyro Yaw", m_gyro.getYaw() + "");
+    // SmartDashboard.putBoolean("Gyro Connected", m_gyro.isConnected());
+    // SmartDashboard.putBoolean("Gyro Calibrating", m_gyro.isCalibrating());
+    // SmartDashboard.putString("pose", m_odometry.getPoseMeters().toString());
 
     // Update the odometry in the periodic block
     m_odometry.update(
@@ -246,10 +246,10 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void StraightHeading() {
-    m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0))); 
-    m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0))); 
-    m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
-    m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0))); 
+    m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(90))); 
+    m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(90))); 
+    m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(90)));
+    m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(90))); 
   }
 
   /**

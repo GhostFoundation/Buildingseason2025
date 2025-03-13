@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.908518466790705,
-        "y": 4.04298155737705
+        "x": 7.246865644596491,
+        "y": 4.043
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.408518466790705,
-        "y": 4.04298155737705
+        "x": 6.746865644596491,
+        "y": 4.043
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.079788953292429,
-        "y": 4.04298155737705
+        "x": 6.017098710279108,
+        "y": 4.043
       },
       "prevControl": {
-        "x": 6.608472563401115,
-        "y": 4.04298155737705
+        "x": 6.5457823203877945,
+        "y": 4.043
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "1 coral L3 Score"
     }
   ],
   "rotationTargets": [],
