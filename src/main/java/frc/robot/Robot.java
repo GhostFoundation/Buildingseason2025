@@ -44,6 +44,9 @@ public class Robot extends TimedRobot {
     //Elevator subsystem
     //ElevatorSubsystem Elevator = new ElevatorSubsystem();
     String LiftPosition = "Zero";
+    double LiftSetpoint = 0;
+    boolean CorrectionRunOnce = false;
+    double ArmSetpoint = 0;
     boolean hasTouched = false;
 
     //pressed
@@ -97,8 +100,9 @@ public class Robot extends TimedRobot {
         if(hasTouched == false && touch1.get()==false && touch2.get() ==false){
             m_robotContainer.Lift.Stop();
             m_robotContainer.Lift.Zero();
+            LiftSetpoint = 0;
             hasTouched = true;
-        }else if(hasTouched == true || touch1.get() == true || touch2.get() == true){
+        }else if(hasTouched == true && (touch1.get() == true || touch2.get() == true)){
             hasTouched = false;
         }
         
@@ -114,6 +118,7 @@ public class Robot extends TimedRobot {
     /** This function is called once when teleop is enabled. */
     @Override
     public void teleopInit() {
+        //hasTouched = true;
     }
 
     @Override
@@ -226,32 +231,52 @@ public class Robot extends TimedRobot {
         }else if(haspressed == true && driverController.getR1ButtonPressed()){
             haspressed = false;
         }
+
+        
        
         if (operatorController.getCrossButton() && haspressed == false){
             //L1 pose
-            m_robotContainer.Arm.Setposition(-40); // 12
-            m_robotContainer.Lift.Setposition(-5); //34
+            //LiftSetpoint = -5;
+            if(hasTouched == true)
+                LiftSetpoint = -5;
+            else{
+                LiftSetpoint = 0;
+            }
+            ArmSetpoint = -40;
+            //m_robotContainer.Arm.Setposition(ArmSetpoint); // 12
+            //m_robotContainer.Lift.Setposition(LiftSetpoint); //34
             
             LiftPosition = "L1";
             ArmPosition = "L1Scoring";
         }else if(operatorController.getSquareButton() && haspressed == false){
             //L2 pose
-            m_robotContainer.Arm.Setposition(145); //12
-            m_robotContainer.Lift.Setposition(-5);
+            if(hasTouched == true)
+            LiftSetpoint = -5;
+            else{
+                LiftSetpoint = 0;
+            }
+            //LiftSetpoint = -5;
+            ArmSetpoint = 150;
+            //m_robotContainer.Arm.Setposition(ArmSetpoint); //145
+            //m_robotContainer.Lift.Setposition(LiftSetpoint);
 
             LiftPosition = "L2";
             ArmPosition = "L2Scoring";
         }else if(operatorController.getTriangleButton() && haspressed == false){
             //L3 pose
-            m_robotContainer.Arm.Setposition(155); // -2.8
-            m_robotContainer.Lift.Setposition(170); //37.5
+            LiftSetpoint = 170;
+            ArmSetpoint = 160;
+           // m_robotContainer.Arm.Setposition(ArmSetpoint); // 155
+           // m_robotContainer.Lift.Setposition(LiftSetpoint); //170
 
             LiftPosition = "L3";
             ArmPosition = "L3Scoring";
         }else if(operatorController.getCircleButton() && haspressed == false){
             //L4 pose 
-            m_robotContainer.Arm.Setposition(170);
-            m_robotContainer.Lift.Setposition(480);
+            LiftSetpoint = 480;
+            ArmSetpoint = 170;
+            //m_robotContainer.Arm.Setposition(ArmSetpoint);
+           // m_robotContainer.Lift.Setposition(LiftSetpoint);
 
             LiftPosition = "L4";
             ArmPosition = "L4Scoring";
@@ -260,15 +285,19 @@ public class Robot extends TimedRobot {
 
         else if (operatorController.getSquareButton() && haspressed == true){
             //Algae Low
-            m_robotContainer.Arm.Setposition(70);
-                m_robotContainer.Lift.Setposition(75);
+            LiftSetpoint = 75;
+            ArmSetpoint = 70;
+            //m_robotContainer.Arm.Setposition(ArmSetpoint);
+           // m_robotContainer.Lift.Setposition(LiftSetpoint);
             
             LiftPosition = "Algae low";
             ArmPosition = "Algae";
         }else if(operatorController.getTriangleButton() && haspressed == true){
             //Algae high
-            m_robotContainer.Arm.Setposition(70);
-            m_robotContainer.Lift.Setposition(300);
+            LiftSetpoint = 300;
+            ArmSetpoint = 70;
+            //m_robotContainer.Arm.Setposition(ArmSetpoint);
+           // m_robotContainer.Lift.Setposition(LiftSetpoint);
 
             LiftPosition = "Algae high";
             ArmPosition = "Algae";
@@ -287,21 +316,28 @@ public class Robot extends TimedRobot {
 
         //     LiftPosition = "Processor";
         //     ArmPosition = "Processor";
+
         // }
 
         else if(operatorController.getPOV() > 0){ //180 is down
             //Home pose
-        
-            m_robotContainer.Arm.Setposition(0);
-            m_robotContainer.Lift.Setposition(-5);
+            if(hasTouched == true)
+                LiftSetpoint = -5;
+            else{
+                LiftSetpoint = 0;
+            }
+            ArmSetpoint = 0;
+            //m_robotContainer.Arm.Setposition(ArmSetpoint);
+           // m_robotContainer.Lift.Setposition(LiftSetpoint);
 
             LiftPosition = "Home";
             ArmPosition = "Home";
         }else if(operatorController.getL1Button()){
             //Intake Pose
-
-            m_robotContainer.Arm.Setposition(-15);//-28
-            m_robotContainer.Lift.Setposition(315);
+            LiftSetpoint = 312;
+            ArmSetpoint = -15;
+            //m_robotContainer.Arm.Setposition(ArmSetpoint);//-28
+           // m_robotContainer.Lift.Setposition(LiftSetpoint);
 
             LiftPosition = "Coral Station";
             ArmPosition = "Intake";
@@ -322,22 +358,23 @@ public class Robot extends TimedRobot {
         // Holding L2 = Outtaking coral
         //----------------------------------------------------------------
         // 
-        if(CoralTimer.get() > 1 && TimerTrigger == true){
-            CoralCannon.setPower(0);
-            m_robotContainer.Arm.Setposition(0);
-            m_robotContainer.Lift.Setposition(-5);
+         if(CoralTimer.get() > 1 && TimerTrigger == true){
+        //     CoralCannon.setPower(0);
+             ArmSetpoint = ArmSetpoint + 10;
+        //     //m_robotContainer.Arm.Setposition(0);
+        //    // m_robotContainer.Lift.Setposition(-5);
             
-            CoralTimer.stop();
-            TimerTrigger = false;
+             CoralTimer.stop();
+             TimerTrigger = false;
            
-        }
+         }
         if(CoralTimer.get() > 1 && ShotOut == true){
             CoralInserted = false;
             ShotOut = false;
         }
         if(driverController.getR2Axis() > 0 && CoralInserted == true && haspressed == false){
             // Automatisation after shooting out
-            if (TimerTrigger == false){
+             if (TimerTrigger == false){
                 CoralTimer.reset();
                 CoralTimer.start();
                 TimerTrigger = true;
@@ -392,12 +429,42 @@ public class Robot extends TimedRobot {
             CoralCannon.setPower(0);
         }
         //#endregion
-        
 
+        // Corection
+        if((operatorController.getR2Axis() > 0) && CorrectionRunOnce == false){
+            LiftSetpoint = LiftSetpoint + 5;
+            CorrectionRunOnce = true;
+        }
+        else if((operatorController.getL2Axis() > 0) && CorrectionRunOnce == false){
+            LiftSetpoint = LiftSetpoint - 5;
+            CorrectionRunOnce = true;
+        }
+        else if((operatorController.getL2Axis() == 0) && (operatorController.getR2Axis() == 0) && CorrectionRunOnce == true){
+            CorrectionRunOnce = false;
+        }
+
+        // Activation LiftSystem
+        if(hasTouched = true){
+            m_robotContainer.Lift.Setposition(LiftSetpoint);
+        }
+        else{
+            m_robotContainer.Lift.Stop();
+        }
+            m_robotContainer.Arm.Setposition(ArmSetpoint);
+    
+        
+        
+        // if(hasTouched == false && touch1.get()==false && touch2.get() ==false){
+        //     m_robotContainer.Lift.Stop();
+        //     m_robotContainer.Lift.Zero();
+        //     hasTouched = true;
+        // }else if(hasTouched == true || touch1.get() == true || touch2.get() == true){
+        //     hasTouched = false;
+        // }
         SmartDashboard.putBoolean("Inserted", CoralInserted);
         // SmartDashboard.putNumber("Current", CoralCannon.Current());
         SmartDashboard.putNumber("Timer", CoralTimer.get());
-        
+        SmartDashboard.putNumber("lift setpoint", LiftSetpoint);
         // SmartDashboard.putNumber("LiftPoint", m_robotContainer.Lift.getPose());
         
         // SmartDashboard.putNumber("ArmPoint", m_robotContainer.Arm.getPose());
