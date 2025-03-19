@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.LimelightHelpers.RawFiducial;
 import frc.robot.Library.*;
 
 import frc.robot.subsystems.*;
@@ -80,6 +81,16 @@ public class Robot extends TimedRobot {
         Arm.Armmotor.SetZero();
         // initialising the elevator
         Lift.ElevatorMotor.SetZero();
+
+        // Change the camera pose relative to robot center (x forward, y left, z up, degrees)
+        LimelightHelpers.setCameraPose_RobotSpace("", 
+        0,    // Forward offset (meters)
+        0.178,    // Side offset (meters)
+        0.5,    // Height offset (meters)
+        0.0,    // Roll (degrees)
+        0.0,   // Pitch (degrees)
+        0.0     // Yaw (degrees)
+        );
     }
 
     @Override
@@ -366,6 +377,32 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("lift setpoint", LiftSetpoint);
         SmartDashboard.putBoolean("Mode", haspressed);
         //#endregion
+
+        // Get raw AprilTag/Fiducial data
+        RawFiducial[] fiducials = LimelightHelpers.getRawFiducials("");
+        for(RawFiducial fiducial : fiducials) {
+            int id = fiducial.id;                    // Tag ID
+            double txnc = fiducial.txnc;             // X offset (no crosshair)
+            double tync = fiducial.tync;             // Y offset (no crosshair)
+            double ta = fiducial.ta;                 // Target area
+            double distToCamera = fiducial.distToCamera;  // Distance to camera
+            double distToRobot = fiducial.distToRobot;    // Distance to robot
+            double ambiguity = fiducial.ambiguity;   // Tag pose ambiguity
+            
+            SmartDashboard.putNumber("id", id);
+            SmartDashboard.putNumber("txnc",txnc);
+
+            SmartDashboard.putNumber("tync", tync);
+            SmartDashboard.putNumber("ta",ta);
+            SmartDashboard.putNumber("distToCamera", distToCamera);
+            SmartDashboard.putNumber("distToRobot",distToRobot);
+            SmartDashboard.putNumber("ambiguity", ambiguity);
+
+        }
+
+        
+
+
     }
 
     @Override
