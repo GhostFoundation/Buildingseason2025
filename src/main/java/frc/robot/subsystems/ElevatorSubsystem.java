@@ -42,10 +42,10 @@ public class ElevatorSubsystem extends SubsystemBase{
 
                 ElevatorMotor.set_P(1);//1
                 ElevatorMotor.set_I(0);//0
-                ElevatorMotor.set_D(1);//0
-                ElevatorMotor.set_allowedClosedLoopError(0.075);//0.15
-                ElevatorMotor.set_maxVelocity(4500);//2750
-                ElevatorMotor.set_maxAcceleration(2500*3);// 1500*3
+                ElevatorMotor.set_D(1);//1
+                ElevatorMotor.set_allowedClosedLoopError(0.075);//0.075
+                ElevatorMotor.set_maxVelocity(4500);//4500
+                ElevatorMotor.set_maxAcceleration(2500*3);// 2500*3
         }
 
         //----------------------------------------------------------------
