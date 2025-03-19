@@ -1,14 +1,24 @@
 package frc.robot;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -17,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.LimelightHelpers.RawFiducial;
+
 import frc.robot.Library.*;
 
 import frc.robot.subsystems.*;
@@ -28,6 +39,7 @@ public class Robot extends TimedRobot {
     private ElevatorSubsystem Lift;
     private ArmSubsystem Arm;
     private ScoreSubsystem CoralCannon;
+    private DriveSubsystem drive;
 
     private AprilTagVisionSubsystem m_visionSubsystem;
 
@@ -62,13 +74,18 @@ public class Robot extends TimedRobot {
     boolean CoralInserted = false;
     boolean TimerTrigger = false;
     boolean ShotOut = false;
-   
+
+    //TODO check if working
+    //private Pose2d targetPose = new Pose2d(5, 5, Rotation2d.fromDegrees(0));
+    private NetworkTable limelight;
+
     @Override
     public void robotInit() {
         m_robotContainer = new RobotContainer();
         Lift = m_robotContainer.Lift;
         Arm = m_robotContainer.Arm;
         CoralCannon = m_robotContainer.cc;
+        drive = m_robotContainer.m_robotDrive;
 
         String leftCameraName = "leftCam";
         String rightCameraName = "rightCam";
@@ -84,13 +101,16 @@ public class Robot extends TimedRobot {
 
         // Change the camera pose relative to robot center (x forward, y left, z up, degrees)
         LimelightHelpers.setCameraPose_RobotSpace("", 
-        0,    // Forward offset (meters)
-        0.178,    // Side offset (meters)
-        0.5,    // Height offset (meters)
-        0.0,    // Roll (degrees)
+        0.08255,    // Forward offset (meters)
+        0.2286,    // Side offset (meters)
+        0.1651,    // Height offset (meters)
+        180.0,    // Roll (degrees)
         0.0,   // Pitch (degrees)
-        0.0     // Yaw (degrees)
+        90.0     // Yaw (degrees)
         );
+        
+        
+        
     }
 
     @Override
@@ -163,7 +183,7 @@ public class Robot extends TimedRobot {
             else{
                 LiftSetpoint = 0;
             }
-            ArmSetpoint = -40;
+            ArmSetpoint = 0;
             
             LiftPosition = "L1";
             ArmPosition = "L1Scoring";
@@ -178,7 +198,7 @@ public class Robot extends TimedRobot {
             else{
                 LiftSetpoint = 0;
             }
-            ArmSetpoint = 150;
+            ArmSetpoint = 0;
 
             LiftPosition = "L2";
             ArmPosition = "L2Scoring";
@@ -189,7 +209,7 @@ public class Robot extends TimedRobot {
         //#region
         else if(operatorController.getTriangleButton() && haspressed == false){
             LiftSetpoint = 170;
-            ArmSetpoint = 160;
+            ArmSetpoint = 0;
 
             LiftPosition = "L3";
             ArmPosition = "L3Scoring";
@@ -198,13 +218,13 @@ public class Robot extends TimedRobot {
 
         // Coral Mode: L4 Position
         //#region
-        else if(operatorController.getCircleButton() && haspressed == false){ 
-            LiftSetpoint = 480;
-            ArmSetpoint = 170;
+        // else if(operatorController.getCircleButton() && haspressed == false){ 
+        //     LiftSetpoint = 480;
+        //     ArmSetpoint = 0;
 
-            LiftPosition = "L4";
-            ArmPosition = "L4Scoring";
-        }
+        //     LiftPosition = "L4";
+        //     ArmPosition = "L4Scoring";
+        // }
         //#endregion
         
         // Algae Mode: Low position
@@ -248,7 +268,7 @@ public class Robot extends TimedRobot {
         //#region
         else if(operatorController.getL1Button()){
             LiftSetpoint = 312;
-            ArmSetpoint = -15;
+            ArmSetpoint = 0;
 
             LiftPosition = "Coral Station";
             ArmPosition = "Intake";
@@ -374,35 +394,29 @@ public class Robot extends TimedRobot {
         //#region
         SmartDashboard.putBoolean("Inserted", CoralInserted);
         SmartDashboard.putNumber("Timer", CoralTimer.get());
-        SmartDashboard.putNumber("lift setpoint", LiftSetpoint);
+        // SmartDashboard.putNumber("lift setpoint", LiftSetpoint);
         SmartDashboard.putBoolean("Mode", haspressed);
         //#endregion
-
-        // Get raw AprilTag/Fiducial data
-        RawFiducial[] fiducials = LimelightHelpers.getRawFiducials("");
-        for(RawFiducial fiducial : fiducials) {
-            int id = fiducial.id;                    // Tag ID
-            double txnc = fiducial.txnc;             // X offset (no crosshair)
-            double tync = fiducial.tync;             // Y offset (no crosshair)
-            double ta = fiducial.ta;                 // Target area
-            double distToCamera = fiducial.distToCamera;  // Distance to camera
-            double distToRobot = fiducial.distToRobot;    // Distance to robot
-            double ambiguity = fiducial.ambiguity;   // Tag pose ambiguity
-            
-            SmartDashboard.putNumber("id", id);
-            SmartDashboard.putNumber("txnc",txnc);
-
-            SmartDashboard.putNumber("tync", tync);
-            SmartDashboard.putNumber("ta",ta);
-            SmartDashboard.putNumber("distToCamera", distToCamera);
-            SmartDashboard.putNumber("distToRobot",distToRobot);
-            SmartDashboard.putNumber("ambiguity", ambiguity);
-
-        }
-
         
 
+        // double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+        // SmartDashboard.putNumber("tx", tx);
 
+        // double ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+        // SmartDashboard.putNumber("ty", ty);
+        // double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
+        // SmartDashboard.putNumber("ta", ta);
+        // double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+        // SmartDashboard.putNumber("tv", tv);
+        // double tl = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tl").getDouble(0);
+        // SmartDashboard.putNumber("tl", tl);
+        // double[] robotPose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+        // SmartDashboard.putNumber("botpose0",robotPose[0]);
+        // SmartDashboard.putNumber("botpose1",robotPose[1]);
+        // SmartDashboard.putNumber("botpose2",robotPose[2]);
+        // SmartDashboard.putNumber("botpose3",robotPose[3]);
+        // SmartDashboard.putNumber("botpose4",robotPose[4]);
+        // SmartDashboard.putNumber("botpose5",robotPose[5]);
     }
 
     @Override
@@ -429,4 +443,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
   }
+
+
+  
 }

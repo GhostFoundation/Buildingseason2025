@@ -19,6 +19,7 @@ import frc.robot.Commands.ArmCommand;
 import frc.robot.Commands.ElevatorCommand;
 import frc.robot.Commands.IntakeCommand;
 import frc.robot.Commands.ScoreCommand;
+import frc.robot.Commands.VisionCommand;
 import frc.robot.Commands.Unused.ArmLiftCommand;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Library.*;
@@ -138,14 +139,8 @@ public class RobotContainer {
 
     //existing buttons
     new JoystickButton(m_driverController, Button.kShare.value).whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
-
-    //TODO check if this command actually works and does as told
-    // new JoystickButton(m_driverController, Button.kCross.value).whileTrue(new ArmLiftCommand(Arm, Lift, "L1"));
-    // new JoystickButton(m_driverController, Button.kSquare.value).whileTrue(new ArmLiftCommand(Arm, Lift, "L2"));
-    // new JoystickButton(m_driverController, Button.kTriangle.value).whileTrue(new ArmLiftCommand(Arm, Lift, "L3"));
-    // new JoystickButton(m_driverController, Button.kCircle.value).whileTrue(new ArmLiftCommand(Arm, Lift, "L4")); 
-    // new JoystickButton(m_driverController, m_driverController.getPOV(0)).whileTrue(new ArmLiftCommand(Arm, Lift, "Home")); //TODO check if the pov works
-    // new JoystickButton(m_driverController, m_driverController.getPOV(180)).whileTrue(new ArmLiftCommand(Arm, Lift, "Intake")); // TODO check if the pov works
+    new JoystickButton(m_driverController, Button.kSquare.value).whileTrue(new VisionCommand(m_robotDrive));
+    
     // new JoystickButton(m_driverController, Button.kR1.value)
     //     .whileTrue(new RunCommand(
     //         () -> m_robotDrive.setX(),
