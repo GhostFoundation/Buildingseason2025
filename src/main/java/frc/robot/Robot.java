@@ -61,6 +61,7 @@ public class Robot extends TimedRobot {
     boolean CoralInserted = false;
     boolean TimerTrigger = false;
     boolean ShotOut = false;
+    double IntakePower = 0;
    
     @Override
     public void robotInit() {
@@ -160,7 +161,7 @@ public class Robot extends TimedRobot {
         // Coral Mode: L2 Position
         //#region
         else if(operatorController.getSquareButton() && haspressed == false){
-            LiftSetpoint = 0;
+            LiftSetpoint = 200; //0
             ArmSetpoint = 0; // 150
 
             LiftPosition = "L2";
@@ -171,7 +172,7 @@ public class Robot extends TimedRobot {
         // Coral Mode: L3 Position
         //#region
         else if(operatorController.getTriangleButton() && haspressed == false){
-            LiftSetpoint = 170;
+            LiftSetpoint = 400; //170
             ArmSetpoint = 0; // 160
 
             LiftPosition = "L3";
@@ -226,9 +227,9 @@ public class Robot extends TimedRobot {
         // Coral Station position
         //#region
         else if(operatorController.getL1Button()){
-            LiftSetpoint = 312;
+            LiftSetpoint = 350; //312
             ArmSetpoint = 0; // -15
-
+            IntakePower = 0.1;
             LiftPosition = "Coral Station";
             ArmPosition = "Intake";
         }
@@ -260,15 +261,11 @@ public class Robot extends TimedRobot {
         // Activation Lift & Arm
         //#region
         // Activation Lift
-        //if(hasTouched = true){
         Lift.Setposition(LiftSetpoint);
-        // }
-        // else{
-        //     Lift.Stop();
-        // }
-        
         // Activation Arm
         Arm.Setposition(ArmSetpoint);
+        // Activation Cannon
+        CoralCannon.setPower(IntakePower);
         //#endregion
     
         //----------------------------------------------------------------
@@ -276,22 +273,25 @@ public class Robot extends TimedRobot {
         // Holding R2 = Intaking coral
         // Holding L2 = Outtaking coral
         //----------------------------------------------------------------
-        // Move Arm up after 1 sec after shooting trigger
-        //#region
-        if(CoralTimer.get() > 1 && TimerTrigger == true){
-            ArmSetpoint = ArmSetpoint + 10;
-            CoralTimer.stop();
-            TimerTrigger = false;
-        }
-        //#endregion
 
         // After shooting trigger after 1 sec the coral is not inside end-effector
         //#region
-        if(CoralTimer.get() > 1 && ShotOut == true){
+        if(CoralTimer.get() > 2 && ShotOut == true){
+            LiftSetpoint = 0;
             CoralInserted = false;
             ShotOut = false;
         }
         //#endregion
+
+        //
+        //#region
+        if(CoralInserted){
+            IntakePower = 0;
+            LiftSetpoint = 0;
+            ShotOut = false;
+        }
+        //#endregion
+
 
         // Coral Cannon Shooting Coral
         //#region
@@ -303,47 +303,20 @@ public class Robot extends TimedRobot {
                 TimerTrigger = true;
             }
             // outtaking coral
-            CoralCannon.setPower(0.3);
+            IntakePower = 0.3;
             ShotOut = true;
-        //#endregion
-
-        // Coral Cannon: Intake Coral
-        //#region
-        }else if(driverController.getL2Axis() > 0 && CoralInserted == false && haspressed == false){
-            
-            // Automatic Stop Corral
-            if(CoralCannon.CoralInPosition()){
-                CoralCannon.setPower(0);
-                CoralInserted = true;
-                // start timer
-                if (TimerTrigger == false){
-                    CoralTimer.reset();
-                    CoralTimer.start();
-                    TimerTrigger = true;
-                }
-            }
-            // Taking coral in
-            else{
-                CoralCannon.setPower(-0.3);
-                
-            }
-        //#endregion
-
-        // Coral Cannon: Stopped
-        //#region
-        }else if(haspressed == false){ 
-            CoralCannon.setPower(0);
         }
         //#endregion
+
 
         //Coral Cannon: Algae mode
         //#region
         if(driverController.getR2Axis() > 0 && haspressed == true){
-            CoralCannon.setPower(0.2);
+            IntakePower = 0;
         }else if(driverController.getL2Axis() > 0 && haspressed == true){
-            CoralCannon.setPower(-0.5);
+            IntakePower = -0.5;
         }else if(haspressed == true){
-            CoralCannon.setPower(0);
+            IntakePower = 0;
         }
         //#endregion
         
