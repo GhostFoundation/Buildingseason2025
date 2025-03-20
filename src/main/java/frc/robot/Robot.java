@@ -33,6 +33,8 @@ public class Robot extends TimedRobot {
     // Timer object
     private final Timer CoralTimer = new Timer();
    
+    //LEDs
+    private Leds Ledstrip = new Leds();
     //sensors
     //final DigitalInput touch1 = new DigitalInput(0);
     //final DigitalInput touch2 = new DigitalInput(1);
@@ -127,6 +129,13 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        double Aantal_Keer_LED_Knipperen =  5;
+        double LED_Knipper_Interval = 0.5; // is in seconden; 1=
+                                       // 1sec aan en 1 sec
+                                       // uit; 0,5 is half sec
+                                       // aan en 0,5 sec uit
+                                       // etc
+
         //----------------------------------------------------------------
         // Elevator & Arm
         //----------------------------------------------------------------
@@ -145,8 +154,10 @@ public class Robot extends TimedRobot {
         //#region
         if(haspressed == false && driverController.getR1ButtonPressed()){
             haspressed = true;
+            Ledstrip.Led_Strip_Solid(0, 255, 255);
         }else if(haspressed == true && driverController.getR1ButtonPressed()){
             haspressed = false;
+            Ledstrip.Led_Strip_Solid(160, 32, 240);
         }
         //#endregion
 
@@ -198,7 +209,7 @@ public class Robot extends TimedRobot {
         //#region
         else if (operatorController.getSquareButton() && haspressed == true){
             LiftSetpoint = 75;
-            ArmSetpoint = 45; //70
+            ArmSetpoint = 20; //70
             
             LiftPosition = "Algae low";
             ArmPosition = "Algae";
@@ -209,7 +220,7 @@ public class Robot extends TimedRobot {
         //#region
         else if(operatorController.getTriangleButton() && haspressed == true){
             LiftSetpoint = 300;
-            ArmSetpoint = 45; // 70
+            ArmSetpoint = 20; // 70
 
             LiftPosition = "Algae high";
             ArmPosition = "Algae";
@@ -232,9 +243,10 @@ public class Robot extends TimedRobot {
         else if(operatorController.getL1Button()){
             LiftSetpoint = 350; //312
             ArmSetpoint = 0; // -15
-            IntakePower = 0.1;
+            IntakePower = 0.3;
             LiftPosition = "Coral Station";
             ArmPosition = "Intake";
+            Ledstrip.Led_Strip_Knipper(160, 32, 240, Aantal_Keer_LED_Knipperen, LED_Knipper_Interval);
         }
         //#endregion
 
@@ -243,6 +255,7 @@ public class Robot extends TimedRobot {
         if(driverController.getOptionsButton()){
             m_robotContainer.Arm.Stop();
             Lift.Stop();
+            IntakePower = 0;
         }
         //#endregion
 
@@ -293,9 +306,11 @@ public class Robot extends TimedRobot {
             IntakePower = 0;
             LiftSetpoint = 0;
             ShotOut = false;
+            Ledstrip.Led_Strip_Knipper(255, 0, 0, Aantal_Keer_LED_Knipperen, LED_Knipper_Interval);
         }
         if(CoralInside){
             LiftSetpoint = 0;
+            IntakePower = 0.1;
             ShotOut = false;
         }
         //#endregion
@@ -338,8 +353,6 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("lift setpoint", LiftSetpoint);
         SmartDashboard.putBoolean("Mode", haspressed);
 
-        SmartDashboard.putBoolean("Sensor", CoralCannon.sensor1());
-        SmartDashboard.putBoolean("Sensor2", CoralCannon.sensor2());
         //#endregion
     }
 

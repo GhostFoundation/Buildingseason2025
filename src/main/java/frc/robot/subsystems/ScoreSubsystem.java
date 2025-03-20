@@ -9,12 +9,12 @@ import frc.robot.Library.Digital_Input;
 
 public class ScoreSubsystem extends SubsystemBase{
     public TalonFX Cannon = new TalonFX(40);
-    final Digital_Input sensor = new Digital_Input(2, false); //
-    final Digital_Input sensor2 = new Digital_Input(3, false); //
+    final Digital_Input sensor = new Digital_Input(2, false); //closest to wheels
+    final Digital_Input sensor2 = new Digital_Input(3, false); //furthest from wheels
      
     public void setPower(double power){
         Cannon.setNeutralMode(NeutralModeValue.Brake);
-        Cannon.set(power);
+        Cannon.set(-power);
     }
     public boolean sensor1(){
         return sensor.STS.State();
@@ -31,7 +31,7 @@ public class ScoreSubsystem extends SubsystemBase{
         }
     }
     public boolean CoralInpose(){
-        if(sensor2.STS.State() == false && sensor.STS.State()){
+        if(sensor2.STS.State() ==false  && sensor.STS.State()){
             return true;
         }else{
             return false;
