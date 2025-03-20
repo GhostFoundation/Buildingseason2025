@@ -87,6 +87,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        CoralInside = CoralCannon.CoralInside();
+        CoralInpose = CoralCannon.CoralInpose();
         /*
         try {
             Pose3d robotPose = m_visionSubsystem.calculateRobotPose();
