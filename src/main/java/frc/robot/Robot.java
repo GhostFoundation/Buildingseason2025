@@ -34,8 +34,8 @@ public class Robot extends TimedRobot {
     private final Timer CoralTimer = new Timer();
    
     //sensors
-    final DigitalInput touch1 = new DigitalInput(0);
-    final DigitalInput touch2 = new DigitalInput(1);
+    //final DigitalInput touch1 = new DigitalInput(0);
+    //final DigitalInput touch2 = new DigitalInput(1);
     // final DigitalInput sensor = new DigitalInput(2);
 
     private FakePS4Controller driverController = new FakePS4Controller(0);
@@ -96,14 +96,16 @@ public class Robot extends TimedRobot {
             */
         // TODO Add end switch to elevator subsystem
         // Lift End Switch logic
-        if(hasTouched == false && touch1.get()==false && touch2.get() ==false){
-            Lift.Stop();
-            Lift.Zero();
-            LiftSetpoint = 0;
-            hasTouched = true;
-        }else if(hasTouched == true && (touch1.get() == true || touch2.get() == true)){
-            hasTouched = false;
-        }
+        
+        // if(hasTouched == false && touch1.get()==false && touch2.get() ==false){
+        //     Lift.Stop();
+        //     Lift.Zero();
+        //     LiftSetpoint = 0;
+        //     hasTouched = true;
+        // }else if(hasTouched == true && (touch1.get() == true || touch2.get() == true)){
+        //     hasTouched = false;
+        // }
+        
         
     }
 
@@ -147,12 +149,8 @@ public class Robot extends TimedRobot {
         // Coral Mode: L1 Position
         //#region
         if (operatorController.getCrossButton() && haspressed == false){
-            if(hasTouched == true)
-                LiftSetpoint = -5;
-            else{
-                LiftSetpoint = 0;
-            }
-            ArmSetpoint = -40;
+            LiftSetpoint = 0;
+            ArmSetpoint = 0; // -40
             
             LiftPosition = "L1";
             ArmPosition = "L1Scoring";
@@ -162,12 +160,8 @@ public class Robot extends TimedRobot {
         // Coral Mode: L2 Position
         //#region
         else if(operatorController.getSquareButton() && haspressed == false){
-            if(hasTouched == true)
-            LiftSetpoint = -5;
-            else{
-                LiftSetpoint = 0;
-            }
-            ArmSetpoint = 150;
+            LiftSetpoint = 0;
+            ArmSetpoint = 0; // 150
 
             LiftPosition = "L2";
             ArmPosition = "L2Scoring";
@@ -178,7 +172,7 @@ public class Robot extends TimedRobot {
         //#region
         else if(operatorController.getTriangleButton() && haspressed == false){
             LiftSetpoint = 170;
-            ArmSetpoint = 160;
+            ArmSetpoint = 0; // 160
 
             LiftPosition = "L3";
             ArmPosition = "L3Scoring";
@@ -189,7 +183,7 @@ public class Robot extends TimedRobot {
         //#region
         else if(operatorController.getCircleButton() && haspressed == false){ 
             LiftSetpoint = 480;
-            ArmSetpoint = 170;
+            ArmSetpoint = 0; // 170
 
             LiftPosition = "L4";
             ArmPosition = "L4Scoring";
@@ -200,7 +194,7 @@ public class Robot extends TimedRobot {
         //#region
         else if (operatorController.getSquareButton() && haspressed == true){
             LiftSetpoint = 75;
-            ArmSetpoint = 70;
+            ArmSetpoint = 45; //70
             
             LiftPosition = "Algae low";
             ArmPosition = "Algae";
@@ -211,7 +205,7 @@ public class Robot extends TimedRobot {
         //#region
         else if(operatorController.getTriangleButton() && haspressed == true){
             LiftSetpoint = 300;
-            ArmSetpoint = 70;
+            ArmSetpoint = 45; // 70
 
             LiftPosition = "Algae high";
             ArmPosition = "Algae";
@@ -221,11 +215,7 @@ public class Robot extends TimedRobot {
         // Home position
         //#region
         else if(operatorController.getPOV() > 0){ //180 is down
-            if(hasTouched == true)
-                LiftSetpoint = -5;
-            else{
-                LiftSetpoint = 0;
-            }
+            LiftSetpoint = 0;
             ArmSetpoint = 0;
 
             LiftPosition = "Home";
@@ -237,7 +227,7 @@ public class Robot extends TimedRobot {
         //#region
         else if(operatorController.getL1Button()){
             LiftSetpoint = 312;
-            ArmSetpoint = -15;
+            ArmSetpoint = 0; // -15
 
             LiftPosition = "Coral Station";
             ArmPosition = "Intake";
@@ -270,12 +260,12 @@ public class Robot extends TimedRobot {
         // Activation Lift & Arm
         //#region
         // Activation Lift
-        if(hasTouched = true){
-            Lift.Setposition(LiftSetpoint);
-        }
-        else{
-            Lift.Stop();
-        }
+        //if(hasTouched = true){
+        Lift.Setposition(LiftSetpoint);
+        // }
+        // else{
+        //     Lift.Stop();
+        // }
         
         // Activation Arm
         Arm.Setposition(ArmSetpoint);
