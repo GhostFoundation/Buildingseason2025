@@ -16,7 +16,12 @@ public class ScoreSubsystem extends SubsystemBase{
         Cannon.setNeutralMode(NeutralModeValue.Brake);
         Cannon.set(power);
     }
-
+    public boolean sensor1(){
+        return sensor.STS.State();
+    }
+    public boolean sensor2(){
+        return sensor2.STS.State();
+    }
     public boolean CoralInside(){
         if(sensor2.STS.State()){
             return true;

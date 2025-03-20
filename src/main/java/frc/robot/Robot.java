@@ -335,6 +335,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Timer", CoralTimer.get());
         SmartDashboard.putNumber("lift setpoint", LiftSetpoint);
         SmartDashboard.putBoolean("Mode", haspressed);
+
+        SmartDashboard.putBoolean("Sensor", CoralCannon.sensor1());
+        SmartDashboard.putBoolean("Sensor2", CoralCannon.sensor2());
         //#endregion
     }
 
