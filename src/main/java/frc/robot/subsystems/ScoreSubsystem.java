@@ -17,11 +17,18 @@ public class ScoreSubsystem extends SubsystemBase{
         Cannon.set(power);
     }
 
-    public boolean CoralInPosition(){
+    public boolean CoralInside(){
         if(sensor2.STS.State()){
             return true;
         }
         else{
+            return false;
+        }
+    }
+    public boolean CoralInpose(){
+        if(sensor2.STS.State() == false && sensor.STS.State()){
+            return true;
+        }else{
             return false;
         }
     }

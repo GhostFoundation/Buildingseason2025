@@ -58,7 +58,8 @@ public class Robot extends TimedRobot {
     boolean playerss = false;
 
     // CoralCanon
-    boolean CoralInserted = false;
+    boolean CoralInside = false;
+    boolean CoralInpose = false;
     boolean TimerTrigger = false;
     boolean ShotOut = false;
     double IntakePower = 0;
@@ -276,17 +277,22 @@ public class Robot extends TimedRobot {
 
         // After shooting trigger after 1 sec the coral is not inside end-effector
         //#region
-        if(CoralTimer.get() > 2 && ShotOut == true){
+        if(CoralTimer.get() > 1.5 && ShotOut == true){
             LiftSetpoint = 0;
-            CoralInserted = false;
+            CoralInpose = false;
+            CoralInside = false;
             ShotOut = false;
         }
         //#endregion
 
         //
         //#region
-        if(CoralInserted){
+        if(CoralInpose){
             IntakePower = 0;
+            LiftSetpoint = 0;
+            ShotOut = false;
+        }
+        if(CoralInside){
             LiftSetpoint = 0;
             ShotOut = false;
         }
@@ -295,7 +301,7 @@ public class Robot extends TimedRobot {
 
         // Coral Cannon Shooting Coral
         //#region
-        if(driverController.getR2Axis() > 0 && CoralInserted == true && haspressed == false){
+        if(driverController.getR2Axis() > 0 && CoralInpose == true && haspressed == false){
             // Start timer
             if (TimerTrigger == false){
                 CoralTimer.reset();
@@ -324,7 +330,8 @@ public class Robot extends TimedRobot {
         // SmartDashboard
         //----------------------------------------------------------------
         //#region
-        SmartDashboard.putBoolean("Inserted", CoralInserted);
+        SmartDashboard.putBoolean("InPosition", CoralInpose);
+        SmartDashboard.putBoolean("Inside", CoralInside);
         SmartDashboard.putNumber("Timer", CoralTimer.get());
         SmartDashboard.putNumber("lift setpoint", LiftSetpoint);
         SmartDashboard.putBoolean("Mode", haspressed);

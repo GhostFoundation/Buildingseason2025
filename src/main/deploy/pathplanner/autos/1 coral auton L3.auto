@@ -5,12 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "ArmUp"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "1 coral auton (1)"
@@ -25,37 +19,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ArmL3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Score"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ArmUp"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "HomeLift"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "1 coral auton (2)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "HomeArm"
           }
         },
         {
