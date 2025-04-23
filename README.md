@@ -28,7 +28,38 @@ This project is built using Java and the WPILib framework. It features:
 
 ## 🧩 Project Structure
 
-Buildingseason2025/ ├── src/ │ └── main/java/frc/robot/ │ ├── Commands/ # Command classes for each subsystem │ ├── Library/ # Custom controller and PID utilities │ ├── subsystems/ # Subsystems: Drive, Arm, Elevator, etc. │ ├── Constants.java # Centralized constants used project-wide │ ├── Configs.java # Configuration loader for robot tuning │ ├── LimelightHelpers.java # Helper functions for Limelight integration │ ├── Robot.java # Main robot class (entry point) │ └── RobotContainer.java# Binds subsystems and commands ├── build.gradle # Build configuration using Gradle └── README.md # You're here!
+Buildingseason2025/
+│
+├── build.gradle                  # Gradle build configuration
+│
+└── src/
+    └── main/
+        └── java/
+            └── frc/
+                └── robot/
+                    ├── Commands/              # Command classes for autonomous and teleop behavior
+                    │   ├── Drive/            # Drive-related commands
+                    │   ├── Arm/              # Arm movement logic
+                    │   ├── Elevator/         # Elevator motion control
+                    │   └── Score/            # Scoring actions and sequences
+                    │
+                    ├── Library/              # Custom motor and PID control classes
+                    │   ├── NEO_SpeedCtrl.java         # Wrapper for NEO motor control with encoders
+                    │   ├── TalonFX_PID.java           # PID controller for Falcon (TalonFX) motors
+                    │   └── NEO_Absolute_PID.java      # Absolute encoder PID control for NEOs
+                    │
+                    ├── subsystems/           # Robot subsystems, representing physical components
+                    │   ├── DriveSubsystem.java
+                    │   ├── ArmSubsystem.java
+                    │   ├── ElevatorSubsystem.java
+                    │   └── ScoreSubsystem.java
+                    │
+                    ├── Constants.java        # All global constants (ports, PID values, tuning parameters)
+                    ├── Configs.java          # Loadable robot configuration profiles
+                    ├── LimelightHelpers.java # Utility class for vision processing with Limelight
+                    ├── Robot.java            # Main robot entry point (extends TimedRobot)
+                    └── RobotContainer.java   # Central binding class for subsystems and commands
+
 
 ## ⚙️ Subsystems & Key Components
 
