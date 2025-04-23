@@ -1,4 +1,6 @@
 # Buildingseason2025 - Ghost Foundation Robotics
+![Static Badge](https://img.shields.io/badge/FIRST%20Robotics%20Competition%20-%20%23105D95?style=for-the-badge&logo=first&logoColor=white&logoSize=auto&labelColor=%23105D95)
+![GitHub last commit](https://img.shields.io/github/last-commit/GhostFoundation/Buildingseason2025%2FComp-new-end-effector?style=for-the-badge)
 
 Welcome to the official codebase for Ghost Foundation's FRC 2025 competition robot. This repository contains all the logic, configuration, and subsystem control for our swerve-driven robot, tailored for the 2025 FIRST Robotics Competition.
 
