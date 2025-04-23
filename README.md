@@ -20,6 +20,8 @@ This project is built using Java and the WPILib framework. It features:
 - **Advanced PID control** using custom speed controllers.
 - **Vision processing** through the Limelight camera.
 
+[![Watch the video](https://img.youtube.com/vi/tZvk1nJOGS0/0.jpg)]([https://www.youtube.com/watch?v=_5tFXJQIzi4](https://www.youtube.com/watch?v=tZvk1nJOGS0))
+
 ## Project Structure
 ```
 Buildingseason2025/
